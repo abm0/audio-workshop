@@ -1,1 +1,5 @@
 ./**/node_modules
+venv
+__pycache__
+db.sqlite3
+pretrained_models
