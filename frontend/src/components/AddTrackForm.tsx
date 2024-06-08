@@ -4,7 +4,7 @@ import { isRequired } from '../shared/validators';
 import { FileUploader } from './TrackUploader';
 import { useUnit } from 'effector-react';
 import { $user } from '../models/user';
-import { trackUpdateFx } from '../models/track';
+import { trackUpdateFx } from '../models/track.effects';
 import { useState } from 'react';
 
 interface IAddTrackForm {

@@ -20,3 +20,7 @@ export type TrackUpdateResponse = {
   user_id: string,
   title: string;
 };
+
+export type TrackDeletePayload = {
+  id: string;
+};

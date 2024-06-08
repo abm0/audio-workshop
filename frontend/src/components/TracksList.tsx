@@ -1,18 +1,33 @@
-import { Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, Wrap } from "@chakra-ui/react";
+import { Button, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, Wrap } from "@chakra-ui/react";
 import { useUnit } from "effector-react";
 import { $tracks } from "../models/track";
 import { isEmpty, values } from "lodash";
-import { useEffect } from "react";
-import { fetchTracksListFx } from "../models/track.effects";
+import { useEffect, useState } from "react";
+import { trackDeleteFx, trackFetchListFx } from "../models/track.effects";
+import { Track } from "../models/track.types";
+import { DeleteIcon } from "@chakra-ui/icons";
+
+interface IDeleteButton {
+  trackId: Track['id'];
+}
+
+const DeleteButton = (props: IDeleteButton) => {
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const handleClick = async () => {
+    setIsLoading(true);
+    await trackDeleteFx({ id: props.trackId });
+    setIsLoading(false);
+  };
+
+  return <Button size="xs" isLoading={isLoading} onClick={handleClick}><DeleteIcon /></Button>;
+}
 
 const TracksList = () => {
   const tracks = useUnit($tracks);
 
-
-  console.log(tracks);
-  
   useEffect(() => {
-    fetchTracksListFx();
+    trackFetchListFx();
   }, []);
 
   if (isEmpty(tracks.byId)) {
@@ -43,6 +58,7 @@ const TracksList = () => {
             <Th>
               Вокал
             </Th>
+            <Th />
           </Tr>
         </Thead>
         <Tbody>
@@ -53,6 +69,9 @@ const TracksList = () => {
               <Td />
               <Td />
               <Td />
+              <Td>
+                <DeleteButton trackId={track.id} />
+              </Td>
             </Tr>
           ))}
         </Tbody>

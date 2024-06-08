@@ -8,13 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import TrackUploadSerializer, TrackUpdateSerializer, TrackSerializer
 from .models import Track
 
-class TrackUploadView(RetrieveAPIView):
+
+class TrackManageView(RetrieveAPIView):
 
     permission_classes = (IsAuthenticated,)
-    serializer_class = TrackUploadSerializer
 
     def post(self, request):        
-        serializer = self.get_serializer(data=request.data)
+        serializer = TrackUploadSerializer(data=request.data)
         
         if serializer.is_valid():
             track = serializer.save()
@@ -34,14 +34,9 @@ class TrackUploadView(RetrieveAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class TrackUpdateView(RetrieveAPIView):
-
-    permission_classes = (IsAuthenticated,)
-    serializer_class = TrackUpdateSerializer
-
-    def post(self, request):
+    def put(self, request):
         instance = Track.objects.get(pk=request.data['id'])        
-        serializer = self.get_serializer(instance, data=request.data)
+        serializer = TrackUpdateSerializer(instance, data=request.data)
         
         if serializer.is_valid():
             track = serializer.save()
@@ -62,6 +57,21 @@ class TrackUpdateView(RetrieveAPIView):
 
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request):
+        track_id = request.query_params.get('id', None)
+        
+        if track_id is None:
+            return Response('Не найден id в параметрах запроса', status=status.HTTP_400_BAD_REQUEST)
+        
+        track = Track.objects.get(pk=track_id)
+        
+        if track is None:
+            return Response('Трек c таким id не найден', status=status.HTTP_400_BAD_REQUEST)
+        
+        track.delete()
+        
+        return Response('Трек успешно удалён', status=status.HTTP_200_OK)
 
 class TrackListView(RetrieveAPIView):
 

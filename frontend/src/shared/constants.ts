@@ -4,8 +4,7 @@ export enum ApiPathNames {
     SIGNUP,
     SIGNIN,
     LOGOUT,
-    TRACK_UPLOAD,
-    TRACK_UPDATE,
+    TRACK_MANAGE,
     TRACKS_LIST,
 }
 
@@ -16,8 +15,7 @@ export const apiPaths = {
     [ApiPathNames.SIGNUP]: '/auth/signup',
     [ApiPathNames.SIGNIN]: '/auth/signin',
     [ApiPathNames.LOGOUT]: '/auth/signout',
-    [ApiPathNames.TRACK_UPLOAD]: '/track/upload',
-    [ApiPathNames.TRACK_UPDATE]: '/track/update',
+    [ApiPathNames.TRACK_MANAGE]: '/track/manage',
     [ApiPathNames.TRACKS_LIST]: '/track/list',
 
     getPath(key: ApiPathNames) {

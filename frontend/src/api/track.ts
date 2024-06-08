@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ApiPathNames, apiPaths } from '../shared/constants';
 import { getAuthHeaders } from '../shared/utils';
-import { TrackUpdatePayload, TrackUpdateResponse } from '../models/track.types';
+import { TrackDeletePayload, TrackUpdatePayload, TrackUpdateResponse } from '../models/track.types';
 
 export const updateTrack = async (payload: TrackUpdatePayload): Promise<TrackUpdateResponse> => {
   try {
@@ -15,7 +15,7 @@ export const updateTrack = async (payload: TrackUpdatePayload): Promise<TrackUpd
       title: payload.title
     };
 
-    const response = await axios.post(apiPaths.getPath(ApiPathNames.TRACK_UPDATE), requestPayload, config);
+    const response = await axios.put(apiPaths.getPath(ApiPathNames.TRACK_MANAGE), requestPayload, config);
     
     return response.data.payload;
   } catch (e) {
@@ -32,7 +32,7 @@ export const uploadTrack = async (payload: FormData) => {
       },
     };
 
-    const response = await axios.post(apiPaths.getPath(ApiPathNames.TRACK_UPLOAD), payload, config);
+    const response = await axios.post(apiPaths.getPath(ApiPathNames.TRACK_MANAGE), payload, config);
 
     return response.data.payload;
   } catch (e) {
@@ -52,4 +52,21 @@ export const fetchTracksList = async () => {
   } catch(e) {
     throw new Error('Ошибка при загрузке списка треков пользователя')
   } 
+};
+
+export const deleteTrack = async (payload: TrackDeletePayload) => {
+  try {
+    const config = {
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'multipart/form-data'
+      },
+    };
+
+    await axios.delete(`${apiPaths.getPath(ApiPathNames.TRACK_MANAGE)}?id=${payload.id}`, config)
+    
+    return true
+  } catch (error) {
+    throw new Error('Ошибка при удалении трека')
+  }
 };
