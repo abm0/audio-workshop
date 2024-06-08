@@ -1,5 +1,5 @@
 
-export type UserModel = {
+export type UserStore = {
     email: string;
     id: string;
 }

@@ -35,7 +35,7 @@ const AuthForm = () => {
               {({ input, meta }) => (
                 <Stack spacing={2}>
                   <Text>
-                    Password:
+                    Пароль:
                   </Text>
                   <Input type="password" name={input.name} isInvalid={meta.touched && meta.error} onChange={input.onChange} />
                 </Stack>
