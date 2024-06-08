@@ -8,8 +8,6 @@ import { MAIN_PATH } from "../shared/constants";
 const AuthPage: React.FC = () => {
   const isAuthenticated = useUnit($isAuthenticated);
 
-
-  console.log(isAuthenticated)
   if (isAuthenticated) {
     return <Navigate to={MAIN_PATH} />
   }

@@ -1,5 +1,5 @@
 import { Button, HStack, Heading, Image } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { $isAuthenticated, logout } from "../models/auth";
 import { useUnit } from "effector-react";
 import logo from '../assets/logo.svg';

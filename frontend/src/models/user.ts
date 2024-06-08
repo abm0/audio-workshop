@@ -1,11 +1,10 @@
 import { createStore } from 'effector';
 import { UserModel } from './user.types';
-import { loginFx } from './auth.effects';
-import { logout } from './auth';
+import { loginFx, logoutFx } from './auth.effects';
 
 export const $user = createStore<UserModel | null>(null)
     .on(loginFx.doneData, (_, payload) => payload)
-    .on(logout, () => null);
+    .on(logoutFx.doneData, () => null);
 
 
 (window as any).userStore = $user;

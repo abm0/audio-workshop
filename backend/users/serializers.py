@@ -1,13 +1,9 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from rest_framework import serializers
-from rest_framework_jwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import UserProfile
 from .models import User
-
-JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
-JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,29 +30,39 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=255)
+    id = serializers.CharField(max_length=255, read_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
-    token = serializers.CharField(max_length=255, read_only=True)
+    access_token = serializers.CharField(max_length=255, read_only=True)
+    refresh_token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
         email = data.get("email", None)
         password = data.get("password", None)
-
+        
         user = authenticate(email=email, password=password)
 
         if user is None:
             raise serializers.ValidationError(
-                "A user with this email and password is not found."
+                "Неверные данные пользователя"
             )
 
         try:
-            payload = JWT_PAYLOAD_HANDLER(user)
-            jwt_token = JWT_ENCODE_HANDLER(payload)
             update_last_login(None, user)
         except User.DoesNotExist:
             raise serializers.ValidationError(
                 "User with given email and password does not exists"
             )
-        return {"email": user.email, "token": jwt_token}
+            
+        refresh = RefreshToken.for_user(user)
+
+        print(user.id)
+        
+        return {
+            "email": user.email,
+            "id": str(user.id),
+            "access_token": str(refresh.access_token),
+            "refresh_token": str(refresh)
+        }
 
 
 class UserDetailSerializer(serializers.ModelSerializer):

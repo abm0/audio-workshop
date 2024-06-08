@@ -2,9 +2,9 @@ from rest_framework import status
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserRegistrationSerializer
-from .serializers import UserLoginSerializer, UserDetailSerializer
+from .serializers import UserLoginSerializer
 from .models import UserProfile
 
 
@@ -37,28 +37,39 @@ class UserLoginView(RetrieveAPIView):
         response = {
             "success": True,
             "status code": status.HTTP_200_OK,
-            "email": serializer.data["email"],
             "message": "User logged in successfully",
-            "token": serializer.data["token"],
+            "payload": serializer.data
+        }
+        status_code = status.HTTP_200_OK
+
+        return Response(response, status=status_code)
+    
+class UserLogoutView(RetrieveAPIView):
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        refresh_token = request.data.get('refresh_token')
+
+        if not refresh_token:
+            return Response({'error': 'Необходимо передать refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+        token = RefreshToken(refresh_token)
+
+        token.blacklist()
+        
+        response = {
+            "success": True,
+            "status code": status.HTTP_200_OK,
+            "message": "User logged in successfully"
         }
         status_code = status.HTTP_200_OK
 
         return Response(response, status=status_code)
 
-
-class UserView(RetrieveAPIView):
-    permission_classes = (AllowAny,)
-    serializer_class = UserDetailSerializer
-
-    def get(self, request, email):
-        serializer = UserDetailSerializer(request.user)
-        return Response(serializer.data)
-
-
 class UserProfileView(RetrieveAPIView):
 
     permission_classes = (IsAuthenticated,)
-    authentication_class = JSONWebTokenAuthentication
 
     def get(self, request):
         try:

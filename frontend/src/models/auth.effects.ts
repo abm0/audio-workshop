@@ -1,17 +1,37 @@
 import { createEffect} from "effector";
-import { AuthPayload } from "./auth.types";
+import { AuthPayload, LogoutPayload } from "./auth.types";
 import * as authApi from '../api/authUser';
-import { AUTH_TOKEN_LS_KEY } from "../shared/constants";
+import { ACCESS_TOKEN_LS_KEY, REFRESH_TOKEN_LS_KEY } from "../shared/constants";
 
 export const loginFx = createEffect(async (payload: AuthPayload) => {
-  const result = await authApi.authUser(payload);
+  try {
+    const result = await authApi.authUser(payload);
 
-  if (result.success) {
-    const { token } = result;
-    
-    localStorage.setItem(AUTH_TOKEN_LS_KEY, token);
-    return token;
+      const { access_token, refresh_token, email, id } = result;
+      
+      localStorage.setItem(ACCESS_TOKEN_LS_KEY, access_token);
+      localStorage.setItem(REFRESH_TOKEN_LS_KEY, refresh_token)
+
+      return {
+        email, 
+        id
+      };
+  } catch(e) {
+    throw e;
   }
+});
 
-  return result;
+export const logoutFx = createEffect(async () => {
+  try {
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN_LS_KEY);
+
+    if (!refreshToken) throw new Error('Отсутствует refresh token');
+    
+    await authApi.logout({ refreshToken });
+      
+    localStorage.removeItem(ACCESS_TOKEN_LS_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_LS_KEY)
+  } catch(e) {
+    throw e;
+  }
 });
