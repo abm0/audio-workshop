@@ -1,4 +1,4 @@
-import { Button, Input, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Button, useDisclosure } from "@chakra-ui/react";
 import {
   Modal,
   ModalOverlay,
@@ -8,58 +8,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
-import { Field, Form } from "react-final-form";
-import { isRequired } from "../shared/validators";
-import { FileUploader } from "./TrackUploader";
-
-interface IAddTrackForm {
-  onSubmit: () => void;
-}
-
-export type TrackFormData = {
-  filename: string;
-  fileId: string;
-};
-
-const AddTrackForm = (props: IAddTrackForm) => {
-  const handleFormSubmit = () => {
-    props.onSubmit();
-  };
-
-  return (
-    <Form<TrackFormData> onSubmit={handleFormSubmit}>
-        {({ handleSubmit }) => (
-          <Stack spacing={8}>
-            <Field name="filename" validate={isRequired}>
-              {({ meta, input }) => (
-                <Stack spacing={2}>
-                  <Text>
-                    Название:
-                  </Text>
-                  <Input name={input.name} value={input.value} isInvalid={meta.touched && meta.error} onChange={input.onChange} />
-                </Stack>
-              )}
-            </Field>
-
-            <Field name="file" validate={isRequired}>
-              {({ input, meta }) => (
-                <Stack spacing={2}>
-                  <Text>
-                    Аудиофайл:
-                  </Text>
-                  <FileUploader name={input.name} onChange={input.onChange} />
-                </Stack>
-              )}
-            </Field>
-
-            <Button colorScheme='teal' mr={3} size="sm" onClick={handleSubmit}>
-              Загрузить
-            </Button>
-          </Stack>
-        )}
-      </Form>
-  );
-};
+import { AddTrackForm } from "./AddTrackForm";
 
 const AddTrack = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()

@@ -4,7 +4,7 @@ from django.db import models
 from users.models import User
 
 class TrackManager(models.Manager):
-    def create_track(self, title, source_file):
+    def upload_track(self, title, source_file):
         if not title or not source_file:
             raise ValueError("Отсутствуют данные трека")
 
@@ -34,7 +34,7 @@ class Track(models.Model):
     tempo =  models.IntegerField(unique=False, null=True)
     key = models.CharField(max_length=10, unique=False, null=True)
 
-    object = TrackManager()
+    objects = TrackManager()
     
     def __str__(self):
       return self.title

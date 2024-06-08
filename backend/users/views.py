@@ -37,7 +37,7 @@ class UserLoginView(RetrieveAPIView):
         response = {
             "success": True,
             "status code": status.HTTP_200_OK,
-            "message": "User logged in successfully",
+            "message": "Пользователь успешно авторизован",
             "payload": serializer.data
         }
         status_code = status.HTTP_200_OK
@@ -61,7 +61,7 @@ class UserLogoutView(RetrieveAPIView):
         response = {
             "success": True,
             "status code": status.HTTP_200_OK,
-            "message": "User logged in successfully"
+            "message": "Авторизация пользователя прекращена"
         }
         status_code = status.HTTP_200_OK
 
@@ -78,7 +78,7 @@ class UserProfileView(RetrieveAPIView):
             response = {
                 "success": True,
                 "status code": status_code,
-                "message": "User profile fetched successfully",
+                "message": "Пользователь успешно загружен",
                 "data": [
                     {
                         "name": user_profile.name,
@@ -91,7 +91,7 @@ class UserProfileView(RetrieveAPIView):
             response = {
                 "success": False,
                 "status code": status.HTTP_400_BAD_REQUEST,
-                "message": "User does not exists",
+                "message": "Пользователь с такими данными не существует",
                 "error": str(e),
             }
         return Response(response, status=status_code)

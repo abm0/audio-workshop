@@ -1,38 +1,38 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Text } from '@chakra-ui/react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useForm } from 'react-final-form';
-import { TrackFormData } from './AddTrack';
+import { TrackFormData } from './AddTrackForm';
 import { uploadTrack } from '../api/uploadTrack';
 
 interface ITrackUploader {
-  name: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
 }
 
 const TrackUploader = (props: ITrackUploader) => {
-  const { name, onChange } = props;
+  const { error } = props;
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+  
   const formApi = useForm<TrackFormData>();
-
-  const [trackId, setTrackId] = useState('');
 
   const handleFileInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file == null) return;
     
-    // formApi.change('filename', file.name);
+    formApi.resetFieldState('trackId');
+    
     const formData = new FormData();
     formData.append('source_file', file);
     formData.append('title', file.name);
     
     const response = await uploadTrack(formData);
 
-    console.log(response.track_id);
+    formApi.change('trackId', response.track_id);
 
-    setTrackId(response.track_id);
+    if (formApi.getState().values.title == null) {
+      formApi.change('title', file.name);
+    }
   };
 
   return (
@@ -42,15 +42,12 @@ const TrackUploader = (props: ITrackUploader) => {
         type="file"
         ref={fileInputRef}
         hidden
+        accept=".mp3,.wav"
         onChange={handleFileInputChange}
       />
-      <input
-        type="text"
-        name={name}
-        value={trackId}
-        hidden
-        onChange={onChange}
-      />
+      <Text size="xs" color="red" hidden={error == null}>
+        {error}
+      </Text>
     </Box>
   );
 };
