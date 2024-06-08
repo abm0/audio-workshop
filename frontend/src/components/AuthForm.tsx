@@ -1,4 +1,3 @@
-import React from "react";
 import { Field, Form } from "react-final-form";
 import { Box, Button, Heading, Input, Spacer, Stack, Text } from '@chakra-ui/react';
 import { isRequired } from "../shared/validators";
@@ -9,7 +8,7 @@ type AuthFormData = {
   password: string;
 }
 
-const AuthForm: React.FC = () => {
+const AuthForm = () => {
   const handleFormSubmit = (values: AuthFormData) => {
     loginFx(values);
   };
