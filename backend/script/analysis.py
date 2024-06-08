@@ -19,5 +19,6 @@ def analyze_audio(file_path):
 if __name__ == "__main__":
     file_path = "./track3.mp3"
     key, bpm = analyze_audio(file_path)
+
     print(f"Тональность: {key}")
     print(f"BPM: {bpm}")

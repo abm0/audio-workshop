@@ -10,8 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "axios": "^1.7.2",
+    "effector": "^23.2.2",
+    "effector-react": "^23.2.1",
+    "final-form": "^4.20.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-final-form": "^6.5.9",
     "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
