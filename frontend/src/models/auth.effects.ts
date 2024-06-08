@@ -1,9 +1,9 @@
 import { createEffect} from "effector";
-import { AuthPayload, LogoutPayload } from "./auth.types";
+import { AuthRequestPayload, LogoutRequestPayload } from "./auth.types";
 import * as authApi from '../api/authUser';
 import { ACCESS_TOKEN_LS_KEY, REFRESH_TOKEN_LS_KEY } from "../shared/constants";
 
-export const loginFx = createEffect(async (payload: AuthPayload) => {
+export const loginFx = createEffect(async (payload: AuthRequestPayload) => {
   try {
     const result = await authApi.authUser(payload);
 

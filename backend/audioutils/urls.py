@@ -5,5 +5,6 @@ from rest_framework_jwt.views import refresh_jwt_token
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include("users.urls")),
-    path("auth/token-refresh/", refresh_jwt_token),
+    # path("auth/token-refresh/", refresh_jwt_token),
+    path("track/", include("tracks.urls"))
 ]

@@ -32,6 +32,9 @@ class UserManager(BaseUserManager):
         user.save()
 
         return user
+    
+    def get_tracks(self):
+        return self.tracks.all()
 
 
 class User(AbstractBaseUser):
@@ -46,8 +49,6 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
-    # Tells Django that the UserManager class defined above should manage
-    # objects of this type.
     objects = UserManager()
 
     def __str__(self):

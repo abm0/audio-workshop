@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { Field, Form } from "react-final-form";
 import { isRequired } from "../shared/validators";
-import { FileUploader } from "./FileUploader";
+import { FileUploader } from "./TrackUploader";
 
 interface IAddTrackForm {
   onSubmit: () => void;

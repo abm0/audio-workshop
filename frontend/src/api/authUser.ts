@@ -1,9 +1,10 @@
 
 import axios from 'axios';
 import { ACCESS_TOKEN_LS_KEY, ApiPathNames, apiPaths } from '../shared/constants';
-import { AuthPayload, LogoutPayload } from '../models/auth.types';
+import { AuthRequestPayload, LogoutRequestPayload } from '../models/auth.types';
+import { getAuthHeaders } from '../shared/utils';
 
-export const authUser = async (payload: AuthPayload) => {
+export const authUser = async (payload: AuthRequestPayload) => {
   try {
     const { data } = await axios.post(apiPaths.getPath(ApiPathNames.SIGNIN), payload);
     
@@ -13,12 +14,10 @@ export const authUser = async (payload: AuthPayload) => {
   }
 };
 
-export const logout = async (payload: LogoutPayload) => {
+export const logout = async (payload: LogoutRequestPayload) => {
   try {
     const config = {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem(ACCESS_TOKEN_LS_KEY)}`
-      },
+      headers: getAuthHeaders(),
     };
 
     const requestPayload = {

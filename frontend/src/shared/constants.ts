@@ -3,13 +3,16 @@ export const API_HOST = 'http://127.0.0.1:8000';
 export enum ApiPathNames {
     SIGNUP,
     SIGNIN,
-    LOGOUT
+    LOGOUT,
+    TRACK_UPLOAD
 }
 
 export const apiPaths = {
     [ApiPathNames.SIGNUP]: '/auth/signup',
     [ApiPathNames.SIGNIN]: '/auth/signin',
     [ApiPathNames.LOGOUT]: '/auth/signout',
+    [ApiPathNames.TRACK_UPLOAD]: '/track/upload',
+
     getPath(key: ApiPathNames) {
         return `${API_HOST}${this[key]}`
     }

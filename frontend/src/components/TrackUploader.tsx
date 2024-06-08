@@ -2,27 +2,37 @@ import { Box, Button } from '@chakra-ui/react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useForm } from 'react-final-form';
 import { TrackFormData } from './AddTrack';
+import { uploadTrack } from '../api/uploadTrack';
 
-interface IFileUploader {
+interface ITrackUploader {
   name: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FileUploader = (props: IFileUploader) => {
+const TrackUploader = (props: ITrackUploader) => {
   const { name, onChange } = props;
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const formApi = useForm<TrackFormData>();
 
-  const [fileId, setFileId] = useState('');
+  const [trackId, setTrackId] = useState('');
 
-  const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file == null) return;
     
-    formApi.change('filename', file.name);
+    // formApi.change('filename', file.name);
+    const formData = new FormData();
+    formData.append('source_file', file);
+    formData.append('title', file.name);
+    
+    const response = await uploadTrack(formData);
+
+    console.log(response.track_id);
+
+    setTrackId(response.track_id);
   };
 
   return (
@@ -37,7 +47,7 @@ const FileUploader = (props: IFileUploader) => {
       <input
         type="text"
         name={name}
-        value={fileId}
+        value={trackId}
         hidden
         onChange={onChange}
       />
@@ -45,4 +55,4 @@ const FileUploader = (props: IFileUploader) => {
   );
 };
 
-export { FileUploader };
+export { TrackUploader as FileUploader };

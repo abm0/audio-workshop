@@ -1,10 +1,10 @@
 export type AuthStore = boolean;
 
-export type AuthPayload = {
+export type AuthRequestPayload = {
     email: string;
     password: string;
 }
 
-export type LogoutPayload = {
+export type LogoutRequestPayload = {
     refreshToken: string;
 }

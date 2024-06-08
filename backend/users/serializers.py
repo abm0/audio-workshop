@@ -8,7 +8,7 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ("name",)
+        fields = ("name")
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
