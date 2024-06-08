@@ -19,7 +19,7 @@ export const updateTrack = async (payload: TrackUpdatePayload): Promise<TrackUpd
     
     return response.data.payload;
   } catch (e) {
-    throw new Error('Ошибка при загрузке файла')
+    throw new Error('Ошибка при обновлении трека')
   }
 };
 
@@ -38,4 +38,18 @@ export const uploadTrack = async (payload: FormData) => {
   } catch (e) {
     throw new Error('Ошибка при загрузке файла')
   }
+};
+
+export const fetchTracksList = async () => {
+  try {
+    const config = {
+      headers: getAuthHeaders(),
+    };
+
+    const response = await axios.get(apiPaths.getPath(ApiPathNames.TRACKS_LIST), config);
+
+    return response.data.payload;
+  } catch(e) {
+    throw new Error('Ошибка при загрузке списка треков пользователя')
+  } 
 };

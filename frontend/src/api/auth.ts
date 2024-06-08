@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { ACCESS_TOKEN_LS_KEY, ApiPathNames, apiPaths } from '../shared/constants';
+import { ApiPathNames, apiPaths } from '../shared/constants';
 import { AuthRequestPayload, LogoutRequestPayload } from '../models/auth.types';
 import { getAuthHeaders } from '../shared/utils';
 

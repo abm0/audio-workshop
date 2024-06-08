@@ -34,8 +34,8 @@ class TrackUpdateSerializer(serializers.ModelSerializer):
       
       return instance
     
-# class TrackSerializer(serializers.ModelSerializer):
+class TrackSerializer(serializers.ModelSerializer):
   
-#   class Meta:
-#       model = Track
-#       fields = '__all__'
+  class Meta:
+      model = Track
+      fields = '__all__'

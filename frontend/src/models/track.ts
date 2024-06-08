@@ -1,23 +1,8 @@
 import update from 'immutability-helper';
-import { createEffect, createStore } from 'effector';
-import { TracksStore, TrackUpdatePayload } from './track.types';
-import * as trackApi from '../api/track';
-
-export const trackUpdateFx = createEffect(async (payload: TrackUpdatePayload) => {
-  try {
-    const result = await trackApi.updateTrack(payload);
-
-      const { id, title } = result;
-      
-      return {
-        id,
-        title 
-      };
-  } catch(e) {
-    throw e;
-  }
-});
-
+import { createStore } from 'effector';
+import { TracksStore } from './track.types';
+import { fetchTracksListFx, trackUpdateFx } from './track.effects';
+import { keyBy } from 'lodash';
 
 const initialState = {
   byId: {}
@@ -29,5 +14,10 @@ export const $tracks = createStore<TracksStore>(initialState)
         [payload.id]: {
           $set: payload
         }
+      }
+    }))
+    .on(fetchTracksListFx.doneData, (state, payload) => update(state, {
+      byId: {
+        $merge: keyBy(payload, 'id'),
       }
     }));

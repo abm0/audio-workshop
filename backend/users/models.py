@@ -6,9 +6,6 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
-        """
-        Create and return a `User` with an email, username and password.
-        """
         if not email:
             raise ValueError("Users Must Have an email address")
 
@@ -20,9 +17,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password):
-        """
-        Create and return a `User` with superuser (admin) permissions.
-        """
         if password is None:
             raise TypeError("Superusers must have a password.")
 
@@ -55,17 +49,11 @@ class User(AbstractBaseUser):
         return self.email
 
     class Meta:
-        """
-        to set table name in database
-        """
 
         db_table = "login"
 
 
 class UserProfile(models.Model):
-    """
-    to store all other attributes associated to user
-    """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(
@@ -74,8 +62,5 @@ class UserProfile(models.Model):
     name = models.CharField(max_length=50, unique=False)
 
     class Meta:
-        """
-        to set table name in database
-        """
 
         db_table = "profile"

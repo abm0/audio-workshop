@@ -206,3 +206,5 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
 
 }
+
+MEDIA_ROOT = 'media'

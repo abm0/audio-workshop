@@ -2,9 +2,18 @@ import { Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, Wrap } from "@ch
 import { useUnit } from "effector-react";
 import { $tracks } from "../models/track";
 import { isEmpty, values } from "lodash";
+import { useEffect } from "react";
+import { fetchTracksListFx } from "../models/track.effects";
 
 const TracksList = () => {
   const tracks = useUnit($tracks);
+
+
+  console.log(tracks);
+  
+  useEffect(() => {
+    fetchTracksListFx();
+  }, []);
 
   if (isEmpty(tracks.byId)) {
     return (

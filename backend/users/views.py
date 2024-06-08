@@ -5,7 +5,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserRegistrationSerializer
 from .serializers import UserLoginSerializer
-from .models import UserProfile
 
 
 class UserRegistrationView(CreateAPIView):
@@ -65,33 +64,4 @@ class UserLogoutView(RetrieveAPIView):
         }
         status_code = status.HTTP_200_OK
 
-        return Response(response, status=status_code)
-
-class UserProfileView(RetrieveAPIView):
-
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        try:
-            user_profile = UserProfile.objects.get(user=request.user)
-            status_code = status.HTTP_200_OK
-            response = {
-                "success": True,
-                "status code": status_code,
-                "message": "Пользователь успешно загружен",
-                "data": [
-                    {
-                        "name": user_profile.name,
-                    }
-                ],
-            }
-
-        except Exception as e:
-            status_code = status.HTTP_400_BAD_REQUEST
-            response = {
-                "success": False,
-                "status code": status.HTTP_400_BAD_REQUEST,
-                "message": "Пользователь с такими данными не существует",
-                "error": str(e),
-            }
         return Response(response, status=status_code)

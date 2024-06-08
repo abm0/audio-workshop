@@ -7,7 +7,7 @@ export type Track = {
 
 export type TracksStore = {
   byId: Record<string, Track>;
-}
+};
 
 export type TrackUpdatePayload = {
   userId: string;
@@ -19,4 +19,4 @@ export type TrackUpdateResponse = {
   id: string,
   user_id: string,
   title: string;
-}
+};
