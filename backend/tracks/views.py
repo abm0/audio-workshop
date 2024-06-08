@@ -49,7 +49,7 @@ class TrackUpdateView(RetrieveAPIView):
                 "status_code": status.HTTP_200_OK,
                 "message": "Трек успешно изменён",
                 "payload": {
-                    "track_id": track.id,
+                    "id": track.id,
                     "user_id": track.user_id,
                     "title": track.title,
                 }

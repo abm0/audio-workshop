@@ -2,7 +2,7 @@ import { Box, Button, Text } from '@chakra-ui/react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useForm } from 'react-final-form';
 import { TrackFormData } from './AddTrackForm';
-import { uploadTrack } from '../api/uploadTrack';
+import * as trackApi from '../api/track';
 
 interface ITrackUploader {
   error?: string;
@@ -26,7 +26,7 @@ const TrackUploader = (props: ITrackUploader) => {
     formData.append('source_file', file);
     formData.append('title', file.name);
     
-    const response = await uploadTrack(formData);
+    const response = await trackApi.uploadTrack(formData);
 
     formApi.change('trackId', response.track_id);
 

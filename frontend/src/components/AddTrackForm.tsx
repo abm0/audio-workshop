@@ -2,9 +2,10 @@ import { Button, Input, Stack, Text } from '@chakra-ui/react';
 import { Field, Form } from 'react-final-form';
 import { isRequired } from '../shared/validators';
 import { FileUploader } from './TrackUploader';
-import { updateTrack } from '../api/updateTrack';
 import { useUnit } from 'effector-react';
 import { $user } from '../models/user';
+import { trackUpdateFx } from '../models/track';
+import { useState } from 'react';
 
 interface IAddTrackForm {
   onSubmit: () => void;
@@ -17,19 +18,20 @@ export type TrackFormData = {
 
 const AddTrackForm = (props: IAddTrackForm) => {
   const user = useUnit($user);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleFormSubmit = async (values: TrackFormData) => {
-    console.log(values);
-
     if (user == null) return;
     
-    const response = updateTrack({
+    setIsSubmitting(true);
+    
+    await trackUpdateFx({
       id: values.trackId,
       userId: user.id,
       title: values.title
     });
 
-    console.log(response);
+    setIsSubmitting(false);
     
     props.onSubmit();
   };
@@ -60,7 +62,7 @@ const AddTrackForm = (props: IAddTrackForm) => {
               )}
             </Field>
 
-            <Button colorScheme='teal' mr={3} size="sm" onClick={handleSubmit}>
+            <Button loadingText="Идёт загрузка.." isLoading={isSubmitting} colorScheme='teal' mr={3} size="sm" onClick={handleSubmit}>
               Загрузить
             </Button>
           </Stack>

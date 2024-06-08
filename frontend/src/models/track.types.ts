@@ -1,14 +1,22 @@
 export type Track = {
   id: string;
   title: string;
-  bpm: number | null;
-  key: string | null;
+  bpm?: number;
+  key?: string;
 };
 
-export type TracksStore = Track[]
+export type TracksStore = {
+  byId: Record<string, Track>;
+}
 
-export type UpdateTrackPayload = {
+export type TrackUpdatePayload = {
   userId: string;
   id: string;
   title: string;
 };
+
+export type TrackUpdateResponse = {
+  id: string,
+  user_id: string,
+  title: string;
+}

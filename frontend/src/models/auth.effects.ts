@@ -1,6 +1,6 @@
 import { createEffect} from "effector";
-import { AuthRequestPayload, LogoutRequestPayload } from "./auth.types";
-import * as authApi from '../api/authUser';
+import { AuthRequestPayload } from "./auth.types";
+import * as authApi from '../api/auth';
 import { ACCESS_TOKEN_LS_KEY, REFRESH_TOKEN_LS_KEY } from "../shared/constants";
 
 export const loginFx = createEffect(async (payload: AuthRequestPayload) => {
