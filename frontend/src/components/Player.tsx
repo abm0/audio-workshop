@@ -45,7 +45,14 @@ const Player = (props: IPlayer) => {
 
   return (
     <>
-      <audio ref={audioRef} src={src} hidden onEnded={() => setPlayer(Actions.STOP)} />
+      <audio 
+        ref={audioRef}
+        src={src}
+        hidden
+        onEnded={() => setPlayer(Actions.STOP)}
+        onPlay={(e) => e.currentTarget.volume = 0.2}
+      />
+
       {isBoolean(isPlaying) && (
         <ButtonGroup size="xs" isAttached variant="outline">
           {isPlaying === true && (
