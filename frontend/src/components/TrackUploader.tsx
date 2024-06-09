@@ -1,9 +1,10 @@
 import { Box, Button, Text } from '@chakra-ui/react';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { useForm } from 'react-final-form';
 import { TrackFormData } from './AddTrackForm';
 import * as trackApi from '../api/track';
 import { trimExtension } from '../shared/utils';
+import { useTranslation } from 'react-i18next';
 
 interface ITrackUploader {
   error?: string;
@@ -11,6 +12,8 @@ interface ITrackUploader {
 
 const TrackUploader = (props: ITrackUploader) => {
   const { error } = props;
+
+  const { t } = useTranslation();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   
@@ -38,7 +41,13 @@ const TrackUploader = (props: ITrackUploader) => {
 
   return (
     <Box>
-      <Button colorScheme="teal" size="sm" onClick={() => fileInputRef.current?.click()}>Выбрать файл</Button>
+      <Button 
+        colorScheme="teal"
+        size="sm"
+        onClick={() => fileInputRef.current?.click()}
+      >
+        {t('select_file')}
+      </Button>
       <input
         type="file"
         ref={fileInputRef}

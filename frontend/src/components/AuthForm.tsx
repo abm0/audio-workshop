@@ -2,6 +2,7 @@ import { Field, Form } from "react-final-form";
 import { Box, Button, Heading, Input, Spacer, Stack, Text } from '@chakra-ui/react';
 import { isRequired } from "../shared/validators";
 import { loginFx } from "../models/auth.effects";
+import { useTranslation } from "react-i18next";
 
 type AuthFormData = {
   email: string;
@@ -9,13 +10,15 @@ type AuthFormData = {
 }
 
 const AuthForm = () => {
+  const { t } = useTranslation();
+
   const handleFormSubmit = (values: AuthFormData) => {
     loginFx(values);
   };
 
   return (
     <Box>
-      <Heading size="md">Авторизация</Heading>
+      <Heading size="md">{t('authorization')}</Heading>
       <Spacer height={8} />
       <Form<AuthFormData> onSubmit={handleFormSubmit}>
         {({ handleSubmit }) => (
@@ -24,7 +27,7 @@ const AuthForm = () => {
               {({ meta, input }) => (
                 <Stack spacing={2}>
                   <Text>
-                    Email:
+                    {t('email')}:
                   </Text>
                   <Input name={input.name} isInvalid={meta.touched && meta.error} onChange={input.onChange} />
                 </Stack>
@@ -35,7 +38,7 @@ const AuthForm = () => {
               {({ input, meta }) => (
                 <Stack spacing={2}>
                   <Text>
-                    Пароль:
+                    {t('password')}:
                   </Text>
                   <Input type="password" name={input.name} isInvalid={meta.touched && meta.error} onChange={input.onChange} />
                 </Stack>
@@ -43,7 +46,14 @@ const AuthForm = () => {
             </Field>
 
             
-            <Button colorScheme="teal" size="sm" width="auto" onClick={handleSubmit}>Войти</Button>
+            <Button
+              colorScheme="teal"
+              size="sm"
+              width="auto"
+              onClick={handleSubmit}
+            >
+              {t('log_in')}
+            </Button>
           </Stack>
         )}
       </Form>

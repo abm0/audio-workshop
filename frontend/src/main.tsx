@@ -10,6 +10,7 @@ import theme from './theme';
 import './index.css';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthLayout } from './layouts/AuthLayout';
+import './i18n/config';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

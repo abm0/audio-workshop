@@ -6,6 +6,7 @@ import { useUnit } from 'effector-react';
 import { $user } from '../models/user';
 import { trackProcessFx } from '../models/track.effects';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface IAddTrackForm {
   onSubmit: () => void;
@@ -17,6 +18,8 @@ export type TrackFormData = {
 };
 
 const AddTrackForm = (props: IAddTrackForm) => {
+  const { t } = useTranslation();
+  
   const user = useUnit($user);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -44,7 +47,7 @@ const AddTrackForm = (props: IAddTrackForm) => {
               {({ meta, input }) => (
                 <Stack spacing={2}>
                   <Text>
-                    Название:
+                    {t('title')}:
                   </Text>
                   <Input name={input.name} value={input.value} isInvalid={meta.touched && meta.error} onChange={input.onChange} />
                 </Stack>
@@ -55,15 +58,15 @@ const AddTrackForm = (props: IAddTrackForm) => {
               {({ meta }) => (
                 <Stack spacing={2}>
                   <Text>
-                    Аудиофайл:
+                    {t('audio_file')}:
                   </Text>
                   <FileUploader error={meta.touched && meta.error} />
                 </Stack>
               )}
             </Field>
 
-            <Button loadingText="Идёт загрузка.." isLoading={isSubmitting} colorScheme='teal' mr={3} size="sm" onClick={handleSubmit}>
-              Загрузить
+            <Button loadingText={`${t('message__analysis_in_progess')}...`} isLoading={isSubmitting} colorScheme='teal' mr={3} size="sm" onClick={handleSubmit}>
+              {t('upload')}
             </Button>
           </Stack>
         )}

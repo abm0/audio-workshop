@@ -7,6 +7,7 @@ import { trackFetchListFx } from "../models/track.effects";
 import { getTrackUrl } from "../shared/utils";
 import { AudioControls } from "./AudioControls";
 import { DeleteButton } from "./DeleteButton";
+import { useTranslation } from "react-i18next";
 
 interface IEmptyRow {
   children: React.ReactNode;
@@ -23,6 +24,8 @@ const EmptyRow = ({ children }: IEmptyRow) => (
 );
 
 const TracksList = () => {
+  const { t } = useTranslation();
+  
   const tracks = useUnit($tracks);
   const searchValue = useUnit($trackSearchQuery);
 
@@ -45,7 +48,7 @@ const TracksList = () => {
       return (
         <EmptyRow>
           <Text>
-            Вы пока не добавили ни одного трека
+            {t('message__empty_tracks')}
           </Text>
         </EmptyRow>
       );
@@ -55,7 +58,7 @@ const TracksList = () => {
       return (
         <EmptyRow>
           <Text>
-            Треков с таким названием не найдено
+            {t('message__tracks_not_found')}
           </Text>
         </EmptyRow>
       );
@@ -88,22 +91,22 @@ const TracksList = () => {
         <Thead>
           <Tr>
             <Th>
-              Название
+              {t('title')}
             </Th>
             <Th>
-              Темп
+              {t('tempo')}
             </Th>
             <Th>
-              Тональность
+              {t('key')}
             </Th>
             <Th>
-              Оригинальная дорожка
+              {t('source_track')}
             </Th>
             <Th>
-              Минус
+              {t('backing_track')}
             </Th>
             <Th>
-              Вокал
+              {t('vocals_track')}
             </Th>
             <Th />
           </Tr>

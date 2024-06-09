@@ -3,10 +3,14 @@ import { $isAuthenticated, logout } from "../models/auth";
 import { useUnit } from "effector-react";
 import logo from '../assets/logo.svg';
 import { $user } from "../models/user";
+import { LanguageSelect } from "./LanguageSelect";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const isAuthenticated = useUnit($isAuthenticated);
   const user = useUnit($user);
+
+  const { t } = useTranslation();
   
   return (
     <HStack justify="space-between">
@@ -16,11 +20,13 @@ const Header = () => {
         </HStack>
 
         <HStack>
+          <LanguageSelect />
+          
           <Text fontWeight={500}>
             {user?.email}
           </Text>
           
-          <Button size="sm" hidden={!isAuthenticated} onClick={() => logout()}>Выйти</Button>
+          <Button size="sm" hidden={!isAuthenticated} onClick={() => logout()}>{t('log_out')}</Button>
         </HStack>
     </HStack>
   );
