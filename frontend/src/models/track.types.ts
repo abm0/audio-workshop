@@ -1,8 +1,11 @@
 export type Track = {
   id: string;
   title: string;
-  bpm?: number;
+  tempo?: number;
   key?: string;
+  source_file?: string;
+  vocals_file?: string;
+  backing_track_file?: string;
 };
 
 export type TracksStore = {

@@ -1,4 +1,4 @@
-import { Button, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, Wrap } from "@chakra-ui/react";
+import { Button, Center, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { useUnit } from "effector-react";
 import { $tracks } from "../models/track";
 import { isEmpty, values } from "lodash";
@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { trackDeleteFx, trackFetchListFx } from "../models/track.effects";
 import { Track } from "../models/track.types";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { Player } from "./Player";
 
 interface IDeleteButton {
   trackId: Track['id'];
@@ -30,13 +31,38 @@ const TracksList = () => {
     trackFetchListFx();
   }, []);
 
-  if (isEmpty(tracks.byId)) {
-    return (
-      <Text>
-        Вы пока не добавили ни одного трека
-      </Text>
-    );
-  }
+  
+
+  const renderBody = () => {
+    if (isEmpty(tracks.byId)) {
+      return (
+        <Tr>
+          <Td colSpan={7}>
+            <Center>
+              <Text>
+                Вы пока не добавили ни одного трека
+              </Text>
+            </Center>
+          </Td>
+        </Tr>
+      );
+    }
+    return values(tracks.byId).map((track) => (
+      <Tr key={track.id}>
+        <Td>{track.title}</Td>
+        <Td />
+        <Td />
+        <Td>
+          <Player src={track.source_file} />
+        </Td>
+        <Td />
+        <Td />
+        <Td>
+          <DeleteButton trackId={track.id} />
+        </Td>
+      </Tr>
+    ))
+  };
 
   return (
     <TableContainer>
@@ -48,6 +74,9 @@ const TracksList = () => {
             </Th>
             <Th>
               Темп
+            </Th>
+            <Th>
+              Тональность
             </Th>
             <Th>
               Оригинальная дорожка
@@ -62,18 +91,7 @@ const TracksList = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {values(tracks.byId).map((track) => (
-            <Tr>
-              <Td>{track.title}</Td>
-              <Td />
-              <Td />
-              <Td />
-              <Td />
-              <Td>
-                <DeleteButton trackId={track.id} />
-              </Td>
-            </Tr>
-          ))}
+          {renderBody()}
         </Tbody>
       </Table>
     </TableContainer>

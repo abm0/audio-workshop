@@ -39,17 +39,13 @@ class TrackManageView(RetrieveAPIView):
         serializer = TrackUpdateSerializer(instance, data=request.data)
         
         if serializer.is_valid():
-            track = serializer.save()
+            serializer.save()
 
             response = {
                 "success": True,
                 "status_code": status.HTTP_200_OK,
                 "message": "Трек успешно изменён",
-                "payload": {
-                    "id": track.id,
-                    "user_id": track.user_id,
-                    "title": track.title,
-                }
+                "payload": serializer.data
             }
             status_code = status.HTTP_200_OK
 
@@ -101,6 +97,10 @@ MEDIA_PATH = os.path.join(BASE_DIR, settings.MEDIA_ROOT)
 def serve_media(request, file_path):    
     # Проверка безопасности: убедитесь, что запрошенный путь находится внутри MEDIA_ROOT
     file_full_path = os.path.join(MEDIA_PATH, file_path).replace('/', '\\')
+
+    print('===========')
+    print(file_full_path)
+    print('===========')
 
     if os.path.abspath(file_full_path).startswith(MEDIA_PATH):
         # Если файл существует, возвращаем его

@@ -28,9 +28,9 @@ class Track(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     title = models.CharField(max_length=50, unique=False)
-    source_file = models.FileField(upload_to='media/uploads/')
-    vocals_file = models.FileField(upload_to='media/uploads/', null=True)
-    backing_track_file = models.FileField(upload_to='media/uploads/', null=True)
+    source_file = models.FileField(upload_to='uploads/')
+    vocals_file = models.FileField(upload_to='uploads/', null=True)
+    backing_track_file = models.FileField(upload_to='uploads/', null=True)
     tempo =  models.IntegerField(unique=False, null=True)
     key = models.CharField(max_length=10, unique=False, null=True)
 

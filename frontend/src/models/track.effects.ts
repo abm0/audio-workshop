@@ -5,14 +5,7 @@ import { Track, TrackDeletePayload, TrackUpdatePayload } from "./track.types";
 
 export const trackUpdateFx = createEffect(async (payload: TrackUpdatePayload) => {
   try {
-    const result = await trackApi.updateTrack(payload);
-
-      const { id, title } = result;
-      
-      return {
-        id,
-        title 
-      };
+    return await trackApi.updateTrack(payload);
   } catch(e) {
     throw e;
   }
@@ -21,9 +14,7 @@ export const trackUpdateFx = createEffect(async (payload: TrackUpdatePayload) =>
 
 export const trackFetchListFx = createEffect(async (): Promise<Track[]> => {
   try {
-    const result = await trackApi.fetchTracksList();
-
-    return result;
+    return await trackApi.fetchTracksList();
   } catch(e) {
     throw e;
   }
