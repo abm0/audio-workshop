@@ -1,8 +1,14 @@
 import { Select } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
+import { LANGUAGE_LS_KEY } from "../shared/constants";
 
 const LanguageSelect = () => {
   const { i18n } = useTranslation();
+  
+  const handleChange = (nextLng: string) => {
+    i18n.changeLanguage(nextLng);
+    localStorage.setItem(LANGUAGE_LS_KEY, nextLng)
+  };
   
   return (
     <Select 
@@ -11,7 +17,7 @@ const LanguageSelect = () => {
       colorScheme="white"
       width="auto"
       value={i18n.language}
-      onChange={(e) => i18n.changeLanguage(e.currentTarget.value)}
+      onChange={(e) => handleChange(e.currentTarget.value)}
     >
       <option value='ru'>Рус</option>
       <option value='en'>Eng</option>

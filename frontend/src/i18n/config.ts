@@ -2,8 +2,9 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import ru from './ru.json';
 import en from './en.json';
+import { LANGUAGE_LS_KEY } from '../shared/constants';
 
-console.log(ru);
+const initialLng = localStorage.getItem(LANGUAGE_LS_KEY) || 'ru';
 
 const resources = {
   ru: {
@@ -18,7 +19,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'ru',
+    lng: initialLng,
     fallbackLng: 'ru',
     interpolation: {
       escapeValue: false

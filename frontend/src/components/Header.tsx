@@ -15,8 +15,8 @@ const Header = () => {
   return (
     <HStack justify="space-between">
         <HStack>
-          <Image src={logo} boxSize="50px" />
-          <Heading size="md" userSelect="none">Audio Utils</Heading>
+          <Image src={logo} backgroundColor="#e5c46e" borderRadius="50%" boxSize="50px" />
+          <Heading size="md" userSelect="none">Audio Workshop</Heading>
         </HStack>
 
         <HStack>

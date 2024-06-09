@@ -39,3 +39,5 @@ export const MAIN_PATH = '/main';
  */
 export const ACCESS_TOKEN_LS_KEY = 'audio-utils-app-access-token';
 export const REFRESH_TOKEN_LS_KEY = 'audio-utils-app-refresh-token';
+
+export const LANGUAGE_LS_KEY = 'audio-utils-app-language'; 
