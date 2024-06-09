@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN_LS_KEY, API_HOST, ApiPathNames, apiPaths } from "./constants";
+import { ACCESS_TOKEN_LS_KEY, ApiPathNames, apiPaths } from "./constants";
 
 export const getAuthHeaders = () => (
   {
@@ -11,3 +11,5 @@ export const getTrackUrl = (trackPath?: string) => {
   
   return `${apiPaths.getPath(ApiPathNames.MEDIA)}${trackPath}`;
 }
+
+export const trimExtension = (path: string) => path.replace(/\.[^/.]+$/, "");

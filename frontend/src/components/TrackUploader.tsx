@@ -3,6 +3,7 @@ import { ChangeEvent, useRef, useState } from 'react';
 import { useForm } from 'react-final-form';
 import { TrackFormData } from './AddTrackForm';
 import * as trackApi from '../api/track';
+import { trimExtension } from '../shared/utils';
 
 interface ITrackUploader {
   error?: string;
@@ -31,7 +32,7 @@ const TrackUploader = (props: ITrackUploader) => {
     formApi.change('trackId', response.track_id);
 
     if (formApi.getState().values.title == null) {
-      formApi.change('title', file.name);
+      formApi.change('title', trimExtension(file.name));
     }
   };
 

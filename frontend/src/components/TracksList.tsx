@@ -1,58 +1,67 @@
-import { DeleteIcon } from "@chakra-ui/icons";
-import { Button, Center, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { Center, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { useUnit } from "effector-react";
 import { isEmpty, values } from "lodash";
-import { useEffect, useState } from "react";
-import { $tracks } from "../models/track";
-import { trackDeleteFx, trackFetchListFx } from "../models/track.effects";
-import { Track } from "../models/track.types";
+import React, { useEffect, useMemo } from "react";
+import { $trackSearchQuery, $tracks } from "../models/track";
+import { trackFetchListFx } from "../models/track.effects";
 import { getTrackUrl } from "../shared/utils";
 import { AudioControls } from "./AudioControls";
+import { DeleteButton } from "./DeleteButton";
 
-interface IDeleteButton {
-  trackId: Track['id'];
+interface IEmptyRow {
+  children: React.ReactNode;
 }
 
-const DeleteButton = (props: IDeleteButton) => {
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const handleClick = async () => {
-    setIsLoading(true);
-    await trackDeleteFx({ id: props.trackId });
-    setIsLoading(false);
-  };
-
-  return (
-    <Button size="xs" isLoading={isLoading} onClick={handleClick}>
-      <DeleteIcon color="red.400" />
-    </Button>
-  );
-}
+const EmptyRow = ({ children }: IEmptyRow) => (
+  <Tr>
+    <Td colSpan={7}>
+      <Center>
+        {children}
+      </Center>
+    </Td>
+  </Tr>
+);
 
 const TracksList = () => {
   const tracks = useUnit($tracks);
+  const searchValue = useUnit($trackSearchQuery);
 
   useEffect(() => {
     trackFetchListFx();
   }, []);
 
-  
+  const displayedTracks = useMemo(() => {
+    const tracksList = values(tracks.byId);
+    
+    if (!isEmpty(searchValue)) {
+      return tracksList.filter((track) => track.title.includes(searchValue))
+    }
+
+    return tracksList;
+  }, [tracks, searchValue]);
 
   const renderBody = () => {
     if (isEmpty(tracks.byId)) {
       return (
-        <Tr>
-          <Td colSpan={7}>
-            <Center>
-              <Text>
-                Вы пока не добавили ни одного трека
-              </Text>
-            </Center>
-          </Td>
-        </Tr>
+        <EmptyRow>
+          <Text>
+            Вы пока не добавили ни одного трека
+          </Text>
+        </EmptyRow>
       );
     }
-    return values(tracks.byId).map((track) => (
+
+    if (!isEmpty(tracks.byId) && isEmpty(displayedTracks)) {
+      return (
+        <EmptyRow>
+          <Text>
+            Треков с таким названием не найдено
+          </Text>
+        </EmptyRow>
+      );
+    }
+
+    return displayedTracks.map((track) => (
       <Tr key={track.id}>
         <Td>{track.title}</Td>
         <Td>{track.tempo}</Td>

@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import { createStore } from 'effector';
+import { createEvent, createStore } from 'effector';
 import { TracksStore } from './track.types';
 import { trackDeleteFx, trackFetchListFx, trackProcessFx } from './track.effects';
 import { keyBy } from 'lodash';
@@ -26,3 +26,8 @@ export const $tracks = createStore<TracksStore>(initialState)
         $unset: [payload.id],
       }
     }));
+
+export const updateSearchQuery = createEvent<string>();
+    
+export const $trackSearchQuery = createStore<string>('')
+    .on(updateSearchQuery, (_, nextValue) => nextValue)

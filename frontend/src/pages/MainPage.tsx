@@ -1,6 +1,7 @@
-import { Box, HStack, Heading, Spacer } from "@chakra-ui/react"
+import { Box, HStack, Heading, Spacer, VStack } from "@chakra-ui/react"
 import { AddTrack } from "../components/AddTrack"
 import { TracksList } from "../components/TracksList"
+import { TrackSearch } from "../components/TrackSearch"
 
 const MainPage = () => {
   return (
@@ -11,7 +12,9 @@ const MainPage = () => {
         </Heading>
         <AddTrack />
       </HStack>
-      <Spacer height={12} />
+      <Spacer height={8} />
+      <TrackSearch />
+      <Spacer height={6} />
       <TracksList />
     </Box>
   )
