@@ -8,7 +8,7 @@ interface IAuthLayout {
 const AuthLayout = ({ headerContent }: IAuthLayout) => (
     <>
         <header className="fixed z-10 w-full bg-teal-600 text-white py-4 h-20">
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 max-w-screen-lg">
                 {headerContent}
             </div>
         </header>

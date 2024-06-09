@@ -1,10 +1,20 @@
-from rest_framework import serializers
+from rest_framework import serializers, validators
 from .models import Track
 
 class TrackUploadSerializer(serializers.ModelSerializer):
     class Meta:
       model = Track
       fields = ("title", "source_file")
+      extra_kwargs = {
+            'title': {
+                'validators': [
+                    validators.UniqueValidator(
+                        queryset=Track.objects.all(),
+                        message="Это значение уже используется. Пожалуйста, выберите другое."
+                    )
+                ]
+            }
+        }
       
     def create(self, validated_data):
         track = Track.objects.upload_track(**validated_data)
@@ -31,6 +41,8 @@ class TrackUpdateSerializer(serializers.ModelSerializer):
       instance.title = validated_data.get('title', instance.title)
       instance.tempo = validated_data.get('tempo', instance.tempo)
       instance.key = validated_data.get('key', instance.key)
+      instance.vocals_file = validated_data.get('vocals_file', instance.vocals_file)
+      instance.backing_track_file = validated_data.get('backing_track_file', instance.backing_track_file)
       
       instance.save()
       

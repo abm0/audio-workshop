@@ -1,6 +1,5 @@
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import { getTrackUrl } from "../shared/utils";
 import { FaPause, FaPlay, FaStop } from "react-icons/fa";
 import { isBoolean } from "lodash";
 
@@ -46,7 +45,7 @@ const Player = (props: IPlayer) => {
 
   return (
     <>
-      <audio ref={audioRef} src={getTrackUrl(src)} hidden onEnded={() => setPlayer(Actions.STOP)} />
+      <audio ref={audioRef} src={src} hidden onEnded={() => setPlayer(Actions.STOP)} />
       {isBoolean(isPlaying) && (
         <ButtonGroup size="xs" isAttached variant="outline">
           {isPlaying === true && (

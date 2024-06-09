@@ -1,12 +1,13 @@
+import { DeleteIcon } from "@chakra-ui/icons";
 import { Button, Center, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { useUnit } from "effector-react";
-import { $tracks } from "../models/track";
 import { isEmpty, values } from "lodash";
 import { useEffect, useState } from "react";
+import { $tracks } from "../models/track";
 import { trackDeleteFx, trackFetchListFx } from "../models/track.effects";
 import { Track } from "../models/track.types";
-import { DeleteIcon } from "@chakra-ui/icons";
-import { Player } from "./Player";
+import { getTrackUrl } from "../shared/utils";
+import { AudioControls } from "./AudioControls";
 
 interface IDeleteButton {
   trackId: Track['id'];
@@ -21,7 +22,11 @@ const DeleteButton = (props: IDeleteButton) => {
     setIsLoading(false);
   };
 
-  return <Button size="xs" isLoading={isLoading} onClick={handleClick}><DeleteIcon /></Button>;
+  return (
+    <Button size="xs" isLoading={isLoading} onClick={handleClick}>
+      <DeleteIcon color="red.400" />
+    </Button>
+  );
 }
 
 const TracksList = () => {
@@ -52,11 +57,15 @@ const TracksList = () => {
         <Td>{track.title}</Td>
         <Td>{track.tempo}</Td>
         <Td>{track.key}</Td>
-        <Td>
-          <Player src={track.source_file} />
+        <Td columnGap={4}>
+          <AudioControls src={getTrackUrl(track.source_file)} />
         </Td>
-        <Td />
-        <Td />
+        <Td>
+          <AudioControls src={getTrackUrl(track.backing_track_file)} />
+        </Td>
+        <Td>
+          <AudioControls src={getTrackUrl(track.vocals_file)} />
+        </Td>
         <Td>
           <DeleteButton trackId={track.id} />
         </Td>
@@ -99,3 +108,4 @@ const TracksList = () => {
 }
 
 export { TracksList };
+

@@ -17,9 +17,6 @@ class TrackManager(models.Manager):
         return track
       
     def get_track_by_id(self, track_id):
-        """
-        Получить трек по его идентификатору.
-        """
         return self.get(pk=track_id)
 
 class Track(models.Model):
@@ -27,7 +24,7 @@ class Track(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-    title = models.CharField(max_length=50, unique=False)
+    title = models.CharField(max_length=50, unique=True)
     source_file = models.FileField(upload_to='uploads/')
     vocals_file = models.FileField(upload_to='uploads/', null=True)
     backing_track_file = models.FileField(upload_to='uploads/', null=True)
@@ -40,8 +37,4 @@ class Track(models.Model):
       return self.title
 
     class Meta:
-        """
-        to set table name in database
-        """
-
         db_table = "tracks"

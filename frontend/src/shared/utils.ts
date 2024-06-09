@@ -6,4 +6,8 @@ export const getAuthHeaders = () => (
   }
 );
 
-export const getTrackUrl = (trackPath: string) => `${apiPaths.getPath(ApiPathNames.MEDIA)}${trackPath}`;
+export const getTrackUrl = (trackPath?: string) => {
+  if (trackPath == null) return;
+  
+  return `${apiPaths.getPath(ApiPathNames.MEDIA)}${trackPath}`;
+}

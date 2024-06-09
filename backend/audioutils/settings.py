@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "users",
-    "tracks",
+    "tracks"
 ]
 
 MIDDLEWARE = [
@@ -209,6 +209,8 @@ SIMPLE_JWT = {
 }
 
 MEDIA_ROOT = 'media'
+UPLOADS_DIR = 'uploads'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_PATH = os.path.join(BASE_DIR, MEDIA_ROOT)
+UPLOADS_PATH = os.path.join(MEDIA_PATH, UPLOADS_DIR)

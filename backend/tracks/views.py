@@ -5,12 +5,11 @@ from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from spleeter.separator import Separator
+
 from .serializers import TrackUploadSerializer, TrackUpdateSerializer, TrackSerializer
 from .models import Track
 from .scripts.analyse import analyze_track
-
-
+from .scripts.separate import separate_track
 
 class TrackManageView(RetrieveAPIView):
 
@@ -111,41 +110,33 @@ class TrackProcesingView(RetrieveAPIView):
             return Response('Трек с таким id не найден', status.HTTP_400_BAD_REQUEST)
         
                 
-        file_full_path = os.path.join(settings.MEDIA_PATH, str(track.source_file)).replace('/', '\\')
+        file_full_path = os.path.join(settings.MEDIA_PATH, str(track.source_file))
         
         key, tempo = analyze_track(file_full_path)
+               
+        separated_output = separate_track(file_full_path)
+        backing_track_file = separated_output[0]
+        vocals_file = separated_output[1]
         
-        # separator = Separator('spleeter:2stems', multiprocess=False)
-        # separated_save_path = os.path.splitext(file_full_path)[0]
+        track.key = key
+        track.tempo = tempo
+        track.backing_track_file.save(track.title + '_backing_track.mp3', backing_track_file)
+        track.vocals_file.save(track.title + '_vocals.mp3', vocals_file)
+        track.save()
         
-        # separator.separate_to_file(file_full_path, separated_save_path)
-
-        data = {
-            'key': key,
-            'tempo': int(tempo)
-        }
-                
-        serializer = TrackUpdateSerializer(instance=track, data=data)
         
-        print('================')
-        print(serializer.is_valid())
-        print('================')
-        
-        if serializer.is_valid():
-            serializer.save()
+        serializer = TrackSerializer(instance=track)
             
-            status_code = status.HTTP_200_OK
-            response = {
-                    "success": True,
-                    "status_code": status_code,
-                    "message": "Трек успешно изменён",
-                    "payload": serializer.data
-                }
-            
-            return Response(response, status=status_code)
+        status_code = status.HTTP_200_OK
+        response = {
+                "success": True,
+                "status_code": status_code,
+                "message": "Трек успешно изменён",
+                "payload": serializer.data
+            }
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(response, status=status_code)
+        
 def serve_media(request, file_path):    
     # Проверка безопасности: убедитесь, что запрошенный путь находится внутри MEDIA_ROOT
     file_full_path = os.path.join(settings.MEDIA_PATH, file_path).replace('/', '\\')
