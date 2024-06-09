@@ -4,7 +4,7 @@ import { isRequired } from '../shared/validators';
 import { FileUploader } from './TrackUploader';
 import { useUnit } from 'effector-react';
 import { $user } from '../models/user';
-import { trackUpdateFx } from '../models/track.effects';
+import { trackProcessFx } from '../models/track.effects';
 import { useState } from 'react';
 
 interface IAddTrackForm {
@@ -25,7 +25,7 @@ const AddTrackForm = (props: IAddTrackForm) => {
     
     setIsSubmitting(true);
     
-    await trackUpdateFx({
+    await trackProcessFx({
       id: values.trackId,
       userId: user.id,
       title: values.title

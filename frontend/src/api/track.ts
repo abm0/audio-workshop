@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ApiPathNames, apiPaths } from '../shared/constants';
 import { getAuthHeaders } from '../shared/utils';
-import { TrackDeletePayload, TrackUpdatePayload, TrackUpdateResponse } from '../models/track.types';
+import { TrackDeletePayload, TrackProcessPayload, TrackUpdatePayload, TrackUpdateResponse } from '../models/track.types';
 
 export const updateTrack = async (payload: TrackUpdatePayload): Promise<TrackUpdateResponse> => {
   try {
@@ -66,6 +66,23 @@ export const deleteTrack = async (payload: TrackDeletePayload) => {
     await axios.delete(`${apiPaths.getPath(ApiPathNames.TRACK_MANAGE)}?id=${payload.id}`, config)
     
     return true
+  } catch (error) {
+    throw new Error('Ошибка при удалении трека')
+  }
+};
+
+export const processTrack = async (payload: TrackProcessPayload) => {
+  try {
+    const config = {
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'multipart/form-data'
+      },
+    };
+
+    const response = await axios.post(apiPaths.getPath(ApiPathNames.TRACK_PROCESSING), payload, config)
+    
+    return response.data.payload;
   } catch (error) {
     throw new Error('Ошибка при удалении трека')
   }

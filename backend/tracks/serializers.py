@@ -20,7 +20,7 @@ class TrackUpdateSerializer(serializers.ModelSerializer):
     vocals_file = serializers.FileField(required=False)
     backing_track_file = serializers.FileField(required=False)
     tempo = serializers.IntegerField(required=False)
-    tempo = serializers.CharField(required=False)
+    key = serializers.CharField(required=False)
   
     class Meta:
       model = Track
@@ -29,6 +29,8 @@ class TrackUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
       instance.user_id = validated_data.get('user_id', instance.user_id)
       instance.title = validated_data.get('title', instance.title)
+      instance.tempo = validated_data.get('tempo', instance.tempo)
+      instance.key = validated_data.get('key', instance.key)
       
       instance.save()
       

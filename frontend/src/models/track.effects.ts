@@ -3,9 +3,11 @@ import * as trackApi from '../api/track';
 import { Track, TrackDeletePayload, TrackUpdatePayload } from "./track.types";
 
 
-export const trackUpdateFx = createEffect(async (payload: TrackUpdatePayload) => {
+export const trackProcessFx = createEffect(async (payload: TrackUpdatePayload) => {
   try {
-    return await trackApi.updateTrack(payload);
+    const data = await trackApi.updateTrack(payload);
+
+    return await trackApi.processTrack({ id: data.id })
   } catch(e) {
     throw e;
   }

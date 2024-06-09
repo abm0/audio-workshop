@@ -7,6 +7,7 @@ export enum ApiPathNames {
     TRACK_MANAGE,
     TRACKS_LIST,
     MEDIA,
+    TRACK_PROCESSING,
 }
 
 /**
@@ -19,6 +20,7 @@ export const apiPaths = {
     [ApiPathNames.TRACK_MANAGE]: '/track/manage',
     [ApiPathNames.TRACKS_LIST]: '/track/list',
     [ApiPathNames.MEDIA]: '/track/media',
+    [ApiPathNames.TRACK_PROCESSING]: '/track/processing',
 
     getPath(key: ApiPathNames) {
         return `${API_HOST}${this[key]}`

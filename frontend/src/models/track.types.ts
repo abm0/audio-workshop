@@ -27,3 +27,7 @@ export type TrackUpdateResponse = {
 export type TrackDeletePayload = {
   id: string;
 };
+
+export type TrackProcessPayload = {
+  id: string;
+};

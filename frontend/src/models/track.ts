@@ -1,7 +1,7 @@
 import update from 'immutability-helper';
 import { createStore } from 'effector';
 import { TracksStore } from './track.types';
-import { trackDeleteFx, trackFetchListFx, trackUpdateFx } from './track.effects';
+import { trackDeleteFx, trackFetchListFx, trackProcessFx } from './track.effects';
 import { keyBy } from 'lodash';
 
 const initialState = {
@@ -9,7 +9,7 @@ const initialState = {
 }
 
 export const $tracks = createStore<TracksStore>(initialState)
-    .on(trackUpdateFx.doneData, (state, payload) => update(state, {
+    .on(trackProcessFx.doneData, (state, payload) => update(state, {
       byId: {
         [payload.id]: {
           $set: payload

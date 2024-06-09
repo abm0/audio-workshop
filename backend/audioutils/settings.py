@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import logging
 import logging.config
+import os
 
 from pathlib import Path
 from datetime import timedelta
@@ -208,3 +209,6 @@ SIMPLE_JWT = {
 }
 
 MEDIA_ROOT = 'media'
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEDIA_PATH = os.path.join(BASE_DIR, MEDIA_ROOT)

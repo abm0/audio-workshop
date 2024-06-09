@@ -50,8 +50,8 @@ const TracksList = () => {
     return values(tracks.byId).map((track) => (
       <Tr key={track.id}>
         <Td>{track.title}</Td>
-        <Td />
-        <Td />
+        <Td>{track.tempo}</Td>
+        <Td>{track.key}</Td>
         <Td>
           <Player src={track.source_file} />
         </Td>

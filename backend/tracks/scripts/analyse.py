@@ -1,6 +1,6 @@
 import librosa
 
-def analyze_audio(file_path):
+def analyze_track(file_path):
     # Загрузка аудио файла
     y, sr = librosa.load(file_path)
     
@@ -15,10 +15,3 @@ def analyze_audio(file_path):
     bpm, _ = tempo
     
     return key, bpm[0]
-
-if __name__ == "__main__":
-    file_path = "./track3.mp3"
-    key, bpm = analyze_audio(file_path)
-
-    print(f"Тональность: {key}")
-    print(f"BPM: {bpm}")

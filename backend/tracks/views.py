@@ -1,12 +1,15 @@
+import os
 from django.http import HttpResponse
 from django.conf import settings
-import os
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from spleeter.separator import Separator
 from .serializers import TrackUploadSerializer, TrackUpdateSerializer, TrackSerializer
 from .models import Track
+from .scripts.analyse import analyze_track
+
 
 
 class TrackManageView(RetrieveAPIView):
@@ -41,13 +44,13 @@ class TrackManageView(RetrieveAPIView):
         if serializer.is_valid():
             serializer.save()
 
+            status_code = status.HTTP_200_OK
             response = {
                 "success": True,
-                "status_code": status.HTTP_200_OK,
+                "status_code": status_code,
                 "message": "Трек успешно изменён",
                 "payload": serializer.data
             }
-            status_code = status.HTTP_200_OK
 
             return Response(response, status=status_code)
 
@@ -81,28 +84,73 @@ class TrackListView(RetrieveAPIView):
         
         serializer = TrackSerializer(user_tracks, many=True)
         
+        status_code = status.HTTP_200_OK
         response = {
                 "success": True,
-                "status_code": status.HTTP_200_OK,
+                "status_code": status_code,
                 "message": "Список треков успешно загружен",
                 "payload": serializer.data
             }
-        status_code = status.HTTP_200_OK
         
         return Response(response, status=status_code)
+    
+class TrackProcesingView(RetrieveAPIView):
+    
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TrackSerializer
+    
+    def post(self, request):
+        track_id = request.data.get('id', None)
+        
+        if track_id is None:
+            return Response('Необходимо передать id трека', status.HTTP_400_BAD_REQUEST)
+        
+        track = Track.objects.get(pk=track_id)
+        
+        if track is None:
+            return Response('Трек с таким id не найден', status.HTTP_400_BAD_REQUEST)
+        
+                
+        file_full_path = os.path.join(settings.MEDIA_PATH, str(track.source_file)).replace('/', '\\')
+        
+        key, tempo = analyze_track(file_full_path)
+        
+        # separator = Separator('spleeter:2stems', multiprocess=False)
+        # separated_save_path = os.path.splitext(file_full_path)[0]
+        
+        # separator.separate_to_file(file_full_path, separated_save_path)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MEDIA_PATH = os.path.join(BASE_DIR, settings.MEDIA_ROOT)
+        data = {
+            'key': key,
+            'tempo': int(tempo)
+        }
+                
+        serializer = TrackUpdateSerializer(instance=track, data=data)
+        
+        print('================')
+        print(serializer.is_valid())
+        print('================')
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            status_code = status.HTTP_200_OK
+            response = {
+                    "success": True,
+                    "status_code": status_code,
+                    "message": "Трек успешно изменён",
+                    "payload": serializer.data
+                }
+            
+            return Response(response, status=status_code)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def serve_media(request, file_path):    
     # Проверка безопасности: убедитесь, что запрошенный путь находится внутри MEDIA_ROOT
-    file_full_path = os.path.join(MEDIA_PATH, file_path).replace('/', '\\')
+    file_full_path = os.path.join(settings.MEDIA_PATH, file_path).replace('/', '\\')
 
-    print('===========')
-    print(file_full_path)
-    print('===========')
-
-    if os.path.abspath(file_full_path).startswith(MEDIA_PATH):
+    if os.path.abspath(file_full_path).startswith(settings.MEDIA_PATH):
         # Если файл существует, возвращаем его
         if os.path.exists(file_full_path):
             with open(file_full_path, 'rb') as f:
