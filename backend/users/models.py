@@ -7,7 +7,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
-            raise ValueError("Users Must Have an email address")
+            raise ValueError("Необходимо указать email пользователя")
 
         user = self.model(
             email=self.normalize_email(email),
@@ -27,21 +27,23 @@ class UserManager(BaseUserManager):
 
         return user
     
-    def get_tracks(self):
-        return self.tracks.all()
+    def get_profile(self):
+        return self.profile
+    
+    def get_songs(self):
+        return self.songs.all()
 
 
 class User(AbstractBaseUser):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(
-        verbose_name="email address", max_length=255, unique=True
+        verbose_name="email address", max_length=50, unique=True
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
 
     objects = UserManager()
 
@@ -49,11 +51,22 @@ class User(AbstractBaseUser):
         return self.email
 
     class Meta:
+        db_table = "users"
 
-        db_table = "login"
 
+class ProfileManager(models.Manager):
+    def create_profile(self, name, user):
+        if not name:
+            raise ValueError("Необходимо указать имя пользователя")
+        
+        if not user:
+            raise ValueError("Необходимо указать id пользователя для создания профиля")
+        
+        profile = self.create(name=name, user=user)
+        
+        return profile
 
-class UserProfile(models.Model):
+class Profile(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(
@@ -61,6 +74,7 @@ class UserProfile(models.Model):
     )
     name = models.CharField(max_length=50, unique=False)
 
-    class Meta:
+    objects = ProfileManager()
 
-        db_table = "profile"
+    class Meta:
+        db_table = "profiles"

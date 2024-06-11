@@ -18,3 +18,4 @@ media
 *$py.class
 .DS_store
 .vscode/
+*.backup

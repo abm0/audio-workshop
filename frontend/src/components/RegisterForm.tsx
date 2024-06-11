@@ -1,25 +1,37 @@
 import { Field, Form } from "react-final-form";
 import { Button, Input, Stack, Text } from '@chakra-ui/react';
 import { isRequired } from "../shared/validators";
-import { loginFx } from "../models/auth.effects";
+import { signupFx } from "../models/auth.effects";
 import { useTranslation } from "react-i18next";
 
-type AuthFormData = {
+type RegisterFormData = {
+  name: string;
   email: string;
   password: string;
 }
 
-const AuthForm = () => {
+const RegisterForm = () => {
   const { t } = useTranslation();
 
-  const handleFormSubmit = (values: AuthFormData) => {
-    loginFx(values);
+  const handleFormSubmit = (values: RegisterFormData) => {
+    signupFx(values);
   };
 
   return (
-    <Form<AuthFormData> onSubmit={handleFormSubmit}>
+    <Form<RegisterFormData> onSubmit={handleFormSubmit}>
       {({ handleSubmit }) => (
         <Stack spacing={4}>
+          <Field name="name" validate={isRequired}>
+            {({ meta, input }) => (
+              <Stack spacing={2}>
+                <Text>
+                  {t('user_name')}:
+                </Text>
+                <Input name={input.name} isInvalid={meta.touched && meta.error} onChange={input.onChange} />
+              </Stack>
+            )}
+          </Field>
+
           <Field name="email" validate={isRequired}>
             {({ meta, input }) => (
               <Stack spacing={2}>
@@ -49,7 +61,7 @@ const AuthForm = () => {
             width="auto"
             onClick={handleSubmit}
           >
-            {t('log_in')}
+            {t('sign_in')}
           </Button>
         </Stack>
       )}
@@ -57,4 +69,4 @@ const AuthForm = () => {
   );
 }
 
-export { AuthForm };
+export { RegisterForm };

@@ -1,6 +1,12 @@
 export type AuthStore = boolean;
 
-export type AuthRequestPayload = {
+export type LoginRequestPayload = {
+    email: string;
+    password: string;
+}
+
+export type RegisterRequestPayload = {
+    name: string;
     email: string;
     password: string;
 }
@@ -8,3 +14,7 @@ export type AuthRequestPayload = {
 export type LogoutRequestPayload = {
     refreshToken: string;
 }
+
+export type RefreshRequestPayload = {
+    refreshToken: string;
+};

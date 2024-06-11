@@ -2,70 +2,73 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import UserProfile
-from .models import User
+from .models import User, Profile
 
-class UserSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
-        fields = ("name")
-
+        model = Profile
+        fields = ('name', 'user')
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-
-    profile = UserSerializer(required=False)
+    name = serializers.CharField(max_length=50)
+    id = serializers.CharField(max_length=32, read_only=True)
+    password = serializers.CharField(max_length=128, write_only=True)
 
     class Meta:
         model = User
-        fields = ("email", "password", "profile")
-        extra_kwargs = {"password": {"write_only": True}}
+        fields = ('email', 'password', 'id', 'name')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        profile_data = validated_data.pop("profile", None)
-        user = User.objects.create_user(**validated_data)
-        if profile_data:
-            UserProfile.objects.create(user=user, name=profile_data["name"])
+        email = validated_data['email']
+        password = validated_data['password']
+        name = validated_data['name']
+        
+        user = User.objects.create_user(email=email, password=password)
+        
+        Profile.objects.create_profile(name=name, user=user)
+                    
         return user
 
 
 class UserLoginSerializer(serializers.Serializer):
-    email = serializers.CharField(max_length=255)
-    id = serializers.CharField(max_length=255, read_only=True)
+    id = serializers.CharField(max_length=32, read_only=True)
+
+    email = serializers.CharField(max_length=50, write_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
+
     access_token = serializers.CharField(max_length=255, read_only=True)
     refresh_token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
-        email = data.get("email", None)
-        password = data.get("password", None)
+        email = data.get('email', None)
+        password = data.get('password', None)
         
         user = authenticate(email=email, password=password)
 
         if user is None:
             raise serializers.ValidationError(
-                "Неверные данные пользователя"
+                'Неверные данные пользователя'
             )
 
         try:
             update_last_login(None, user)
         except User.DoesNotExist:
             raise serializers.ValidationError(
-                "User with given email and password does not exists"
+                'Неверные данные пользователя'
             )
             
         refresh = RefreshToken.for_user(user)
-
-        print(user.id)
         
         return {
-            "email": user.email,
-            "id": str(user.id),
-            "access_token": str(refresh.access_token),
-            "refresh_token": str(refresh)
+            'id': str(user.id),
+            'email': user.email,
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh)
         }
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("email", "profile")
+        fields = ('email', 'profile')
