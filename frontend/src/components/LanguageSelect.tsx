@@ -11,7 +11,7 @@ const LanguageSelect = () => {
   };
   
   return (
-    <Select 
+    <Select
       size="sm"
       variant="filled"
       colorScheme="white"

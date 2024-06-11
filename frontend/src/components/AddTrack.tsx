@@ -23,7 +23,7 @@ const AddTrack = () => {
       
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent paddingBottom={4}>
           <ModalHeader>{t('modal_title__upload_track')}</ModalHeader>
           <ModalCloseButton />
           

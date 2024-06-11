@@ -1,11 +1,14 @@
-import { Box, HStack, Heading, Spacer, VStack } from "@chakra-ui/react"
+import { Box, HStack, Heading, Spacer } from "@chakra-ui/react"
 import { AddTrack } from "../components/AddTrack"
-import { TracksList } from "../components/TracksList"
+import { TracksListDesktop } from "../components/TracksListDesktop"
 import { TrackSearch } from "../components/TrackSearch"
 import { useTranslation } from "react-i18next"
+import { useIsMobile } from "../shared/hooks"
+import { TracksListMobile } from "../components/TracksListMobile"
 
 const MainPage = () => {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   
   return (
     <Box>
@@ -18,7 +21,8 @@ const MainPage = () => {
       <Spacer height={8} />
       <TrackSearch />
       <Spacer height={6} />
-      <TracksList />
+      {isMobile && (<TracksListMobile />)}
+      {!isMobile && (<TracksListDesktop />)}
     </Box>
   )
 }

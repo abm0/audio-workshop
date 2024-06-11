@@ -23,7 +23,7 @@ const EmptyRow = ({ children }: IEmptyRow) => (
   </Tr>
 );
 
-const TracksList = () => {
+const TracksListDesktop = () => {
   const { t } = useTranslation();
   
   const tracks = useUnit($tracks);
@@ -119,5 +119,5 @@ const TracksList = () => {
   );
 }
 
-export { TracksList };
+export { TracksListDesktop };
 

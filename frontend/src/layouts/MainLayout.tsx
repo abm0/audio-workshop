@@ -13,7 +13,7 @@ const MainLayout = ({ headerContent = null }: IMainLayout) => (
             </div>
         </header>
         <main className="relative h-screen pt-20 bg-gray-50">
-            <div className="bg-white p-8 shadow-md max-w-screen-lg mx-auto h-full">
+            <div className="bg-white p-8 shadow-md max-w-screen-lg mx-auto min-h-full overflow-hidden">
                 <Outlet />
             </div>
         </main>
