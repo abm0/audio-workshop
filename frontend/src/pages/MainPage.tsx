@@ -1,10 +1,10 @@
 import { Box, HStack, Heading, Spacer } from "@chakra-ui/react"
-import { AddTrack } from "../components/AddTrack"
-import { TracksListDesktop } from "../components/TracksListDesktop"
-import { TrackSearch } from "../components/TrackSearch"
+import { AddSong } from "../components/AddSong"
+import { SongsListDesktop } from "../components/SongsListDesktop"
+import { SongSearch } from "../components/SongSearch"
 import { useTranslation } from "react-i18next"
 import { useIsMobile } from "../shared/hooks"
-import { TracksListMobile } from "../components/TracksListMobile"
+import { SongsListMobile } from "../components/SongsListMobile"
 
 const MainPage = () => {
   const { t } = useTranslation();
@@ -16,13 +16,13 @@ const MainPage = () => {
         <Heading size="md">
           {t(('my_tracks'))}:
         </Heading>
-        <AddTrack />
+        <AddSong />
       </HStack>
       <Spacer height={8} />
-      <TrackSearch />
+      <SongSearch />
       <Spacer height={6} />
-      {isMobile && (<TracksListMobile />)}
-      {!isMobile && (<TracksListDesktop />)}
+      {isMobile && (<SongsListMobile />)}
+      {!isMobile && (<SongsListDesktop />)}
     </Box>
   )
 }

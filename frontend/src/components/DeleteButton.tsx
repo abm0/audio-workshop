@@ -1,23 +1,23 @@
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Button, ButtonProps } from "@chakra-ui/react";
 import { useState } from "react";
-import { trackDeleteFx } from "../models/track.effects";
-import { Track } from "../models/track.types";
+import { trackDeleteFx } from "../models/song.effects";
+import { Song } from "../models/song.types";
 
 
 interface IDeleteButton {
-  trackId: Track['id'];
+  songId: Song['id'];
   size?: ButtonProps['size'];
 }
 
 const DeleteButton = (props: IDeleteButton) => {
-  const { trackId, size = 'xs' } = props;
+  const { songId, size = 'xs' } = props;
   
   const [isLoading, setIsLoading] = useState(false);
   
   const handleClick = async () => {
     setIsLoading(true);
-    await trackDeleteFx({ id: trackId });
+    await trackDeleteFx({ id: songId });
     setIsLoading(false);
   };
 

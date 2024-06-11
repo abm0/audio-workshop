@@ -1,11 +1,11 @@
 import { useUnit } from "effector-react";
-import { $trackSearchQuery, updateSearchQuery } from "../models/track";
+import { $songSearchQuery, updateSearchQuery } from "../models/song";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useTranslation } from "react-i18next";
 
-const TrackSearch = () => {
-  const searchValue = useUnit($trackSearchQuery);
+const SongSearch = () => {
+  const searchValue = useUnit($songSearchQuery);
 
   const { t } = useTranslation();
   
@@ -23,4 +23,4 @@ const TrackSearch = () => {
   );
 }
 
-export { TrackSearch };
+export { SongSearch };

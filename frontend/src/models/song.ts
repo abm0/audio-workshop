@@ -1,7 +1,7 @@
 import update from 'immutability-helper';
 import { createEvent, createStore } from 'effector';
-import { TracksStore } from './track.types';
-import { trackDeleteFx, trackFetchListFx, trackProcessFx } from './track.effects';
+import { SongsStore } from './song.types';
+import { trackDeleteFx, songsFetchFx, songUploadFx } from './song.effects';
 import { keyBy } from 'lodash';
 import { logout } from './auth.events';
 
@@ -9,15 +9,15 @@ const initialState = {
   byId: {}
 }
 
-export const $tracks = createStore<TracksStore>(initialState)
-    .on(trackProcessFx.doneData, (state, payload) => update(state, {
+export const $songs = createStore<SongsStore>(initialState)
+    .on(songUploadFx.doneData, (state, payload) => update(state, {
       byId: {
         [payload.id]: {
           $set: payload
         }
       }
     }))
-    .on(trackFetchListFx.doneData, (state, payload) => update(state, {
+    .on(songsFetchFx.doneData, (state, payload) => update(state, {
       byId: {
         $merge: keyBy(payload, 'id'),
       }
@@ -31,6 +31,6 @@ export const $tracks = createStore<TracksStore>(initialState)
 
 export const updateSearchQuery = createEvent<string>();
     
-export const $trackSearchQuery = createStore<string>('')
+export const $songSearchQuery = createStore<string>('')
     .on(updateSearchQuery, (_, nextValue) => nextValue)
     .on(logout, () => '');

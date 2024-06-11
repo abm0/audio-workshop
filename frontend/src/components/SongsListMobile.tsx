@@ -1,35 +1,35 @@
-import { Box, Card, CardBody, CardHeader, Center, HStack, Heading, Stack, StackDivider, Tbody, Text, VStack } from "@chakra-ui/react";
+import { Card, CardBody, CardHeader, Center, HStack, Heading, Stack, StackDivider, Tbody, Text, VStack } from "@chakra-ui/react";
 import { useUnit } from "effector-react";
 import { isEmpty, values } from "lodash";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { $trackSearchQuery, $tracks } from "../models/track";
-import { trackFetchListFx } from "../models/track.effects";
-import { getTrackUrl } from "../shared/utils";
+import { $songSearchQuery, $songs } from "../models/song";
+import { songsFetchFx } from "../models/song.effects";
+import { getSongUrl } from "../shared/utils";
 import { AudioControls } from "./AudioControls";
 import { DeleteButton } from "./DeleteButton";
 
-const TracksListMobile = () => {
+const SongsListMobile = () => {
   const { t } = useTranslation();
 
-  const tracks = useUnit($tracks);
-  const searchValue = useUnit($trackSearchQuery);
+  const songs = useUnit($songs);
+  const searchValue = useUnit($songSearchQuery);
 
   useEffect(() => {
-    trackFetchListFx();
+    songsFetchFx();
   }, []);
 
-  const displayedTracks = useMemo(() => {
-    const tracksList = values(tracks.byId);
+  const displayedSongs = useMemo(() => {
+    const songsList = values(songs.byId);
 
     if (!isEmpty(searchValue)) {
-      return tracksList.filter((track) => track.title.includes(searchValue))
+      return songsList.filter((track) => track.title.includes(searchValue))
     }
 
-    return tracksList;
-  }, [tracks, searchValue]);
+    return songsList;
+  }, [songs, searchValue]);
 
-  if (isEmpty(tracks.byId)) {
+  if (isEmpty(songs.byId)) {
     return (
       <Center>
         <Text>
@@ -39,7 +39,7 @@ const TracksListMobile = () => {
     );
   }
 
-  if (!isEmpty(tracks.byId) && isEmpty(displayedTracks)) {
+  if (!isEmpty(songs.byId) && isEmpty(displayedSongs)) {
     return (
       <Center>
         <Text>
@@ -51,13 +51,13 @@ const TracksListMobile = () => {
 
   return (
     <VStack gap={4} alignItems="stretch">
-      {displayedTracks.map((track) => (
-        <Card key={track.id}>
+      {displayedSongs.map((song) => (
+        <Card key={song.id}>
           <Stack divider={<StackDivider />} spacing={2}>
             <CardHeader>
               <HStack justifyContent="space-between">
-                <Heading size="md">{track.title}</Heading>
-                <DeleteButton size="sm" trackId={track.id} />
+                <Heading size="md">{song.title}</Heading>
+                <DeleteButton size="sm" songId={song.id} />
               </HStack>
             </CardHeader>
             <CardBody>
@@ -65,26 +65,26 @@ const TracksListMobile = () => {
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('tempo')}:</Text>
                   <Text fontSize='sm' fontWeight="bold">
-                    {track.tempo}
+                    {song.tempo}
                   </Text>
                 </HStack>
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('key')}:</Text>
                   <Text fontSize='sm' fontWeight="bold">
-                    {track.key}
+                    {song.key}
                   </Text>
                 </HStack>
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('source_track')}:</Text>
-                  <AudioControls src={getTrackUrl(track.source_file)} />
+                  <AudioControls src={getSongUrl(song.source_track)} />
                 </HStack>
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('backing_track')}:</Text>
-                  <AudioControls src={getTrackUrl(track.backing_track_file)} />
+                  <AudioControls src={getSongUrl(song.backing_track)} />
                 </HStack>
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('vocals_track')}:</Text>
-                  <AudioControls src={getTrackUrl(track.vocals_file)} />
+                  <AudioControls src={getSongUrl(song.vocals_track)} />
                 </HStack>
               </Stack>
             </CardBody>
@@ -95,5 +95,5 @@ const TracksListMobile = () => {
   );
 }
 
-export { TracksListMobile };
+export { SongsListMobile };
 

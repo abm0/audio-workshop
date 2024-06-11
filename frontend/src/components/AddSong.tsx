@@ -7,10 +7,10 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
-import { AddTrackForm } from "./AddTrackForm";
+import { AddSongForm } from "./AddSongForm";
 import { useTranslation } from "react-i18next";
 
-const AddTrack = () => {
+const AddSong = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ const AddTrack = () => {
           <ModalCloseButton />
           
           <ModalBody>
-            <AddTrackForm onSubmit={onClose} />
+            <AddSongForm onSubmit={onClose} />
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -36,4 +36,4 @@ const AddTrack = () => {
   );
 }
 
-export { AddTrack };
+export { AddSong };

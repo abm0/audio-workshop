@@ -2,11 +2,11 @@ import os
 from spleeter.separator import Separator
 from spleeter.audio import Codec
 from django.core.files import File
-from django.conf import settings
 from io import BytesIO
 import shutil
 
-def separate_track(file_path):
+def separate_song(file_path):
+  output_path = os.path.splitext(file_path)[0]
   separator = Separator('spleeter:2stems', multiprocess=False)
     
   output_file_names = [
@@ -14,10 +14,9 @@ def separate_track(file_path):
     'vocals.mp3'
   ]
   
-  separator.separate_to_file(file_path, settings.UPLOADS_PATH, codec=Codec.MP3)
+  separator.separate_to_file(file_path, output_path, codec=Codec.MP3, filename_format="{instrument}.{codec}")
   
   files = []
-  output_path = os.path.splitext(file_path)[0]
   
   for output_file in output_file_names:
     try:

@@ -2,9 +2,9 @@ import { Center, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@
 import { useUnit } from "effector-react";
 import { isEmpty, values } from "lodash";
 import React, { useEffect, useMemo } from "react";
-import { $trackSearchQuery, $tracks } from "../models/track";
-import { trackFetchListFx } from "../models/track.effects";
-import { getTrackUrl } from "../shared/utils";
+import { $songSearchQuery, $songs } from "../models/song";
+import { songsFetchFx } from "../models/song.effects";
+import { getSongUrl } from "../shared/utils";
 import { AudioControls } from "./AudioControls";
 import { DeleteButton } from "./DeleteButton";
 import { useTranslation } from "react-i18next";
@@ -23,28 +23,28 @@ const EmptyRow = ({ children }: IEmptyRow) => (
   </Tr>
 );
 
-const TracksListDesktop = () => {
+const SongsListDesktop = () => {
   const { t } = useTranslation();
   
-  const tracks = useUnit($tracks);
-  const searchValue = useUnit($trackSearchQuery);
+  const songs = useUnit($songs);
+  const searchValue = useUnit($songSearchQuery);
 
   useEffect(() => {
-    trackFetchListFx();
+    songsFetchFx();
   }, []);
 
-  const displayedTracks = useMemo(() => {
-    const tracksList = values(tracks.byId);
+  const displayedSongs = useMemo(() => {
+    const songsList = values(songs.byId);
     
     if (!isEmpty(searchValue)) {
-      return tracksList.filter((track) => track.title.includes(searchValue))
+      return songsList.filter((song) => song.title.includes(searchValue))
     }
 
-    return tracksList;
-  }, [tracks, searchValue]);
+    return songsList;
+  }, [songs, searchValue]);
 
   const renderBody = () => {
-    if (isEmpty(tracks.byId)) {
+    if (isEmpty(songs.byId)) {
       return (
         <EmptyRow>
           <Text>
@@ -54,7 +54,7 @@ const TracksListDesktop = () => {
       );
     }
 
-    if (!isEmpty(tracks.byId) && isEmpty(displayedTracks)) {
+    if (!isEmpty(songs.byId) && isEmpty(displayedSongs)) {
       return (
         <EmptyRow>
           <Text>
@@ -64,22 +64,22 @@ const TracksListDesktop = () => {
       );
     }
 
-    return displayedTracks.map((track) => (
-      <Tr key={track.id}>
-        <Td>{track.title}</Td>
-        <Td>{track.tempo}</Td>
-        <Td>{track.key}</Td>
+    return displayedSongs.map((song) => (
+      <Tr key={song.id}>
+        <Td>{song.title}</Td>
+        <Td>{song.tempo}</Td>
+        <Td>{song.key}</Td>
         <Td columnGap={4}>
-          <AudioControls src={getTrackUrl(track.source_file)} />
+          <AudioControls src={getSongUrl(song.source_track)} />
         </Td>
         <Td>
-          <AudioControls src={getTrackUrl(track.backing_track_file)} />
+          <AudioControls src={getSongUrl(song.backing_track)} />
         </Td>
         <Td>
-          <AudioControls src={getTrackUrl(track.vocals_file)} />
+          <AudioControls src={getSongUrl(song.vocals_track)} />
         </Td>
         <Td>
-          <DeleteButton trackId={track.id} />
+          <DeleteButton songId={song.id} />
         </Td>
       </Tr>
     ))
@@ -119,5 +119,5 @@ const TracksListDesktop = () => {
   );
 }
 
-export { TracksListDesktop };
+export { SongsListDesktop };
 

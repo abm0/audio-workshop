@@ -1,46 +1,57 @@
 import { Button, Input, Stack, Text } from '@chakra-ui/react';
 import { Field, Form } from 'react-final-form';
 import { isRequired } from '../shared/validators';
-import { FileUploader } from './TrackUploader';
+import { FileUploader } from './FileUploader';
 import { useUnit } from 'effector-react';
 import { $profile } from '../models/user';
-import { trackProcessFx } from '../models/track.effects';
+import { songUploadFx } from '../models/song.effects';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '@chakra-ui/react';
 
 interface IAddTrackForm {
   onSubmit: () => void;
 }
 
-export type TrackFormData = {
+export type SongFormData = {
   title: string;
-  trackId: string;
+  sourceFile: string | Blob;
 };
 
-const AddTrackForm = (props: IAddTrackForm) => {
+const AddSongForm = (props: IAddTrackForm) => {
   const { t } = useTranslation();
   
-  const user = useUnit($profile);
+  const toast = useToast()
+
+  const profile = useUnit($profile);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleFormSubmit = async (values: TrackFormData) => {
-    if (user == null) return;
+  const handleFormSubmit = async (values: SongFormData) => {
+    if (profile == null) return;
     
     setIsSubmitting(true);
     
-    await trackProcessFx({
-      id: values.trackId,
-      userId: user.id,
-      title: values.title
-    });
+    try {
+      await songUploadFx(values);
 
-    setIsSubmitting(false);
-    
-    props.onSubmit();
+      setIsSubmitting(false);
+      
+      props.onSubmit();
+    } catch (e) {
+      setIsSubmitting(false);
+
+      toast({
+        title: 'Что то пошло не так',
+        description: "При загрузке трека произошла ошибка",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
-    <Form<TrackFormData> onSubmit={handleFormSubmit}>
+    <Form<SongFormData> onSubmit={handleFormSubmit}>
         {({ handleSubmit }) => (
           <Stack spacing={8}>
             <Field name="title" validate={isRequired}>
@@ -54,7 +65,7 @@ const AddTrackForm = (props: IAddTrackForm) => {
               )}
             </Field>
 
-            <Field name="trackId" validate={isRequired}>
+            <Field name="sourceFile">
               {({ meta }) => (
                 <Stack spacing={2}>
                   <Text>
@@ -74,4 +85,4 @@ const AddTrackForm = (props: IAddTrackForm) => {
   );
 };
 
-export { AddTrackForm };
+export { AddSongForm };

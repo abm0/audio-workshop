@@ -98,9 +98,6 @@ class UserDetailsView(RetrieveAPIView):
     def get(self, request):
         user = request.user
                 
-        if not user:
-            return Response({'error': 'Пользователь не найден'})
-
         serializer = self.serializer_class(user)
                 
         response = {

@@ -6,10 +6,10 @@ export const getAuthHeaders = () => (
   }
 );
 
-export const getTrackUrl = (trackPath?: string) => {
-  if (trackPath == null) return;
+export const getSongUrl = (songPath?: string) => {
+  if (songPath == null) return;
   
-  return `${apiPaths.getPath(ApiPathNames.MEDIA)}${trackPath}`;
+  return `${apiPaths.getPath(ApiPathNames.MEDIA)}${songPath}`;
 }
 
 export const trimExtension = (path: string) => path.replace(/\.[^/.]+$/, "");
