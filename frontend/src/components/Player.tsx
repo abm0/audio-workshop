@@ -1,7 +1,9 @@
 import { Button, ButtonGroup } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay, FaStop } from "react-icons/fa";
 import { isBoolean } from "lodash";
+import { eventEmitter } from "../shared/EventEmitter";
+import { EVENT_PLAY_START } from "../shared/constants";
 
 enum Actions {
   PLAY,
@@ -20,6 +22,22 @@ const Player = (props: IPlayer) => {
 
   const [isPlaying, setIsPlaying] = useState<boolean | null>(null);
 
+  useEffect(() => {
+    const handleGlobalPlayClick = (e: Event) => {
+      const customEvent = e as CustomEvent;
+            
+      if (customEvent.detail.src === src) return;
+
+      setPlayer(Actions.STOP);
+    };
+
+    eventEmitter.on(EVENT_PLAY_START, handleGlobalPlayClick);
+
+    return () => {
+      eventEmitter.off(EVENT_PLAY_START, handleGlobalPlayClick);
+    };
+  }, []);
+  
   const setPlayer = (action: Actions) => {
     if (audioRef.current == null) return;
 
@@ -29,11 +47,14 @@ const Player = (props: IPlayer) => {
       case Actions.PLAY:
         player.play();
         setIsPlaying(true);
+        eventEmitter.emit(EVENT_PLAY_START, { src });
         break;
+
       case Actions.PAUSE:
         player.pause();
         setIsPlaying(false)
         break;
+
       case Actions.STOP:
         player.pause();
         setIsPlaying(null);
