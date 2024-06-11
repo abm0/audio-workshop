@@ -5,6 +5,7 @@ export enum ApiPathNames {
     SIGNIN,
     LOGOUT,
     REFRESH,
+    USER_DETAILS,
     TRACK_MANAGE,
     TRACKS_LIST,
     MEDIA,
@@ -15,10 +16,11 @@ export enum ApiPathNames {
  * Список эндпоинтов на сервере
  */
 export const apiPaths = {
-    [ApiPathNames.SIGNUP]: '/auth/signup',
-    [ApiPathNames.SIGNIN]: '/auth/signin',
-    [ApiPathNames.LOGOUT]: '/auth/signout',
-    [ApiPathNames.REFRESH]: '/auth/refresh',
+    [ApiPathNames.SIGNUP]: '/user/signup',
+    [ApiPathNames.SIGNIN]: '/user/signin',
+    [ApiPathNames.LOGOUT]: '/user/signout',
+    [ApiPathNames.REFRESH]: '/user/refresh',
+    [ApiPathNames.USER_DETAILS]: '/user/details',
     [ApiPathNames.TRACK_MANAGE]: '/track/manage',
     [ApiPathNames.TRACKS_LIST]: '/track/list',
     [ApiPathNames.MEDIA]: '/track/media',

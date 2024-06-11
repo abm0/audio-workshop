@@ -1,7 +1,8 @@
 import { createStore } from 'effector';
-import { UserStore } from './user.types';
-import { loginFx, logoutFx } from './auth.effects';
+import { ProfileStore } from './user.types';
+import { loadProfileFx } from './user.effects';
+import { logout } from './auth.events';
 
-export const $user = createStore<UserStore | null>(null)
-    .on(loginFx.doneData, (_, payload) => payload)
-    .on(logoutFx.doneData, () => null);
+export const $profile = createStore<ProfileStore | null>(null)
+    .on(loadProfileFx.doneData, (_, payload) => payload)
+    .on(logout, () => null);

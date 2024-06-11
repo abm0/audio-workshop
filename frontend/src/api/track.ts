@@ -4,17 +4,17 @@ import { getAuthHeaders } from '../shared/utils';
 import { TrackDeletePayload, TrackProcessPayload, TrackUpdatePayload, TrackUpdateResponse } from '../models/track.types';
 
 export const updateTrack = async (payload: TrackUpdatePayload): Promise<TrackUpdateResponse> => {
+  const config = {
+    headers: getAuthHeaders(),
+  };
+
+  const requestPayload = {
+    id: payload.id,
+    user_id: payload.userId,
+    title: payload.title
+  };
+  
   try {
-    const config = {
-      headers: getAuthHeaders(),
-    };
-
-    const requestPayload = {
-      id: payload.id,
-      user_id: payload.userId,
-      title: payload.title
-    };
-
     const response = await axios.put(apiPaths.getPath(ApiPathNames.TRACK_MANAGE), requestPayload, config);
     
     return response.data.payload;

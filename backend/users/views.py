@@ -4,8 +4,7 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import UserRegistrationSerializer
-from .serializers import UserLoginSerializer
+from .serializers import UserRegistrationSerializer, UserDetailSerializer, UserLoginSerializer
 
 
 class UserRegistrationView(CreateAPIView):
@@ -52,7 +51,6 @@ class UserLoginView(RetrieveAPIView):
         return Response(response, status=status_code)
     
 class UserLogoutView(RetrieveAPIView):
-
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
@@ -81,13 +79,37 @@ class UserRefreshView(RetrieveAPIView):
             refresh_token = request.data.get('refresh_token')
 
             if not refresh_token:
-                return Response({'detail': 'Необходимо предоставить refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Необходимо предоставить refresh token'}, status=status.HTTP_400_BAD_REQUEST)
 
             token = RefreshToken(refresh_token)
 
             return Response(str(token.access_token), status=status.HTTP_200_OK)
 
         except TokenError as e:
-            return Response({'detail': 'Неверный токен'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Неверный токен'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class UserDetailsView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    
+    serializer_class = UserDetailSerializer
+    
+    def get(self, request):
+        user = request.user
+                
+        if not user:
+            return Response({'error': 'Пользователь не найден'})
+
+        serializer = self.serializer_class(user)
+                
+        response = {
+            'success': True,
+            'status code': status.HTTP_200_OK,
+            'message': 'Данные пользователя получены',
+            'payload': serializer.data
+        }
+
+        status_code = status.HTTP_200_OK
+        
+        return Response(response, status=status_code)

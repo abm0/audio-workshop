@@ -3,7 +3,7 @@ import { Field, Form } from 'react-final-form';
 import { isRequired } from '../shared/validators';
 import { FileUploader } from './TrackUploader';
 import { useUnit } from 'effector-react';
-import { $user } from '../models/user';
+import { $profile } from '../models/user';
 import { trackProcessFx } from '../models/track.effects';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +20,7 @@ export type TrackFormData = {
 const AddTrackForm = (props: IAddTrackForm) => {
   const { t } = useTranslation();
   
-  const user = useUnit($user);
+  const user = useUnit($profile);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleFormSubmit = async (values: TrackFormData) => {

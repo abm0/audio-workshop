@@ -12,14 +12,16 @@ import {
   Heading, Image,
   Text, useDisclosure
 } from "@chakra-ui/react";
-import { $isAuthenticated, logout } from "../models/auth";
+import { $isAuthenticated,  } from "../models/auth";
+import { logout } from '../models/auth.events'
 import { useUnit } from "effector-react";
 import logo from '../assets/logo.svg';
-import { $user } from "../models/user";
+import { $profile } from "../models/user";
 import { LanguageSelect } from "./LanguageSelect";
 import { useTranslation } from "react-i18next";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useIsMobile } from "../shared/hooks";
+import { Profile } from "./Profile";
 
 interface IDrawerMenu {
   children: React.ReactNode;
@@ -50,7 +52,7 @@ const DrawerMenu = ({ children }: IDrawerMenu) => {
 
 const Header = () => {
   const isAuthenticated = useUnit($isAuthenticated);
-  const user = useUnit($user);
+  const profile = useUnit($profile);
 
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -70,7 +72,7 @@ const Header = () => {
           <DrawerMenu>
             <DrawerHeader>
               <Text color="black">
-                {user?.email}
+                {profile?.email}
               </Text>
             </DrawerHeader>
 
@@ -93,11 +95,9 @@ const Header = () => {
         <HStack>
           <LanguageSelect />
           
-          <Text fontWeight={500}>
-            {user?.email}
-          </Text>
-          
-          <Button size="sm" hidden={!isAuthenticated} onClick={() => logout()}>{t('log_out')}</Button>
+          {isAuthenticated && (
+            <Profile />          
+          )}
         </HStack>
     </HStack>
   );

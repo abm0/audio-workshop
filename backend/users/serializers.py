@@ -69,6 +69,10 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(max_length=32, read_only=True)
+    email = serializers.CharField(max_length=50, read_only=True)
+    profile = serializers.CharField(max_length=50, read_only=True)
+    
     class Meta:
         model = User
-        fields = ('email', 'profile')
+        fields = ('email', 'profile', 'id')

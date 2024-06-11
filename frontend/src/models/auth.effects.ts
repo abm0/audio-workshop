@@ -2,9 +2,7 @@ import { createEffect } from "effector";
 import { LoginRequestPayload, RegisterRequestPayload } from "./auth.types";
 import * as authApi from '../api/auth';
 import { ACCESS_TOKEN_LS_KEY, REFRESH_TOKEN_LS_KEY } from "../shared/constants";
-// import { AxiosError } from "axios";
-
-// const requestFailed401 = createEvent();
+import { login, logout, refreshFailed } from "./auth.events";
 
 export const loginFx = createEffect(async (payload: LoginRequestPayload) => {
   try {
@@ -15,6 +13,8 @@ export const loginFx = createEffect(async (payload: LoginRequestPayload) => {
       localStorage.setItem(ACCESS_TOKEN_LS_KEY, access_token);
       localStorage.setItem(REFRESH_TOKEN_LS_KEY, refresh_token)
 
+      login();
+      
       return {
         email, 
         id
@@ -38,19 +38,13 @@ export const logoutFx = createEffect(async () => {
 
     if (!refreshToken) throw new Error('Отсутствует refresh token');
     
-    const response = await authApi.logout({ refreshToken });
-
-    console.log(response);
+    await authApi.logout({ refreshToken });
       
     localStorage.removeItem(ACCESS_TOKEN_LS_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_LS_KEY)
-  } catch(e) {
-    // if (e instanceof AxiosError && e.response) {
-    //   if (e.response.status === 401) {
-    //     // requestFailed401();
-    //   }
-    // }
-    
+    localStorage.removeItem(REFRESH_TOKEN_LS_KEY);
+
+    logout();
+  } catch(e) {    
     throw e;
   }
 });
@@ -66,6 +60,8 @@ export const refreshTokenFx = createEffect(async () => {
     return token;
   } catch(e) {
     localStorage.removeItem(ACCESS_TOKEN_LS_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_LS_KEY)
+    localStorage.removeItem(REFRESH_TOKEN_LS_KEY);
+
+    logout();
   }
 });
