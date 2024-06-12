@@ -30,6 +30,8 @@
   "message__file_upload_failed": "При загрузке файла произошла ошибка",
   "message__user_created": "Пользователь создан",
   "message__user_create_failed": "При создании пользователя произошла ошибка",
+  "message__log_in": "Вы авторизованы",
+  "message__log_in_failed": "Введён неверный логин и пароль",
   "A": "Ля",
   "A#": "Ля#",
   "B": "Си",

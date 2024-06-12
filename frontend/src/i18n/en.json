@@ -29,5 +29,7 @@
   "message__file_uploaded": "File uploaded",
   "message__file_upload_failed": "File upload failed",
   "message__user_created": "User crated",
-  "message__user_create_failed": "User create failed"
+  "message__user_create_failed": "User create failed",
+  "message__log_in": "You have logged in",
+  "message__log_in_failed": "Wrong email/password"
 }

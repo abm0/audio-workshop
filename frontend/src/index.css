@@ -21,6 +21,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#root {
+  overflow: hidden;
+}
+
+#main {
+  height: calc(100vh - 5rem);
+  overflow: auto;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

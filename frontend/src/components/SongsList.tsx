@@ -97,7 +97,7 @@ const SongsList = () => {
   }
 
   return (
-    <Wrap gap={4}>
+    <Wrap gap="12px">
       {listElements}
     </Wrap>
   )

@@ -26,7 +26,7 @@ const AuthForm = () => {
       
       toast({
         title: t('success'),
-        description: "Вы авторизованы",
+        description: t('message__log_in'),
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -36,8 +36,8 @@ const AuthForm = () => {
 
       toast({
         title: t('something_wrond'),
-        description: "Возможно введён неверный логин и пароль",
-        status: 'success',
+        description: t('message__log_in_failed'),
+        status: 'error',
         duration: 5000,
         isClosable: true,
       });

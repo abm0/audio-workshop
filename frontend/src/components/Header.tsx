@@ -68,22 +68,22 @@ const Header = () => {
     return (
       <HStack justify="space-between">
         {appLogo}
-        {isAuthenticated && (
-          <DrawerMenu>
-            <DrawerHeader>
-              <Text color="black">
-                {profile?.email}
-              </Text>
-            </DrawerHeader>
+        <DrawerMenu>
+          <DrawerHeader>
+          {isAuthenticated && (
+            <Text color="black">
+              {profile?.email}
+            </Text>
+          )}
+          </DrawerHeader>
 
-            <DrawerBody />
+          <DrawerBody />
 
-            <DrawerFooter justifyContent="space-between">
-                <LanguageSelect />
-                <Button size="sm" hidden={!isAuthenticated} onClick={() => logout()}>{t('log_out')}</Button>
-            </DrawerFooter>
-          </DrawerMenu>
-        )}
+          <DrawerFooter justifyContent="space-between">
+              <LanguageSelect />
+              <Button size="sm" hidden={!isAuthenticated} onClick={() => logout()}>{t('log_out')}</Button>
+          </DrawerFooter>
+        </DrawerMenu>
       </HStack>
     );
   }

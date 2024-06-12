@@ -12,8 +12,8 @@ const MainLayout = ({ headerContent = null }: IMainLayout) => (
                 {headerContent}
             </div>
         </header>
-        <main className="relative h-screen pt-20 bg-gray-50">
-            <div className="bg-white p-8 shadow-md max-w-screen-lg mx-auto min-h-full overflow-hidden">
+        <main id="main" className="relative min-h-full pt-20 bg-gray-50 dark:bg-gray-900">
+            <div className="bg-white p-8 shadow-md max-w-screen-lg mx-auto min-h-full">
                 <Outlet />
             </div>
         </main>
