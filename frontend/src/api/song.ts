@@ -12,9 +12,7 @@ export const uploadSong = async (payload: FormData) => {
       },
     };
 
-    const response = await axios.post(apiPaths.getPath(ApiPathNames.SONG_INDEX), payload, config);
-
-    return response.data.payload;
+    return await axios.post(apiPaths.getPath(ApiPathNames.SONG_INDEX), payload, config);
   } catch (e) {
     throw new Error('Ошибка при загрузке файла')
   }
@@ -26,9 +24,7 @@ export const fetchSongs = async () => {
       headers: getAuthHeaders(),
     };
 
-    const response = await axios.get(apiPaths.getPath(ApiPathNames.SONG_INDEX), config);
-
-    return response.data.payload;
+    return await axios.get(apiPaths.getPath(ApiPathNames.SONG_INDEX), config);
   } catch(e) {
     throw new Error('Ошибка при загрузке списка треков пользователя')
   } 
@@ -43,9 +39,7 @@ export const deleteSong = async (payload: SongDeleteRequestPayload) => {
       },
     };
 
-    await axios.delete(`${apiPaths.getPath(ApiPathNames.SONG_INDEX)}?id=${payload.id}`, config)
-    
-    return true
+    return await axios.delete(`${apiPaths.getPath(ApiPathNames.SONG_INDEX)}?id=${payload.id}`, config)
   } catch (error) {
     throw new Error('Ошибка при удалении трека')
   }

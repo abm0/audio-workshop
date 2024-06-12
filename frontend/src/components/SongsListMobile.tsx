@@ -1,10 +1,9 @@
-import { Card, CardBody, CardHeader, Center, HStack, Heading, Stack, StackDivider, Tbody, Text, VStack } from "@chakra-ui/react";
+import { Card, CardBody, CardHeader, Center, HStack, Heading, Stack, StackDivider, Text, VStack } from "@chakra-ui/react";
 import { useUnit } from "effector-react";
 import { isEmpty, values } from "lodash";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { $songSearchQuery, $songs } from "../models/song";
-import { songsFetchFx } from "../models/song.effects";
 import { getSongUrl } from "../shared/utils";
 import { AudioControls } from "./AudioControls";
 import { DeleteButton } from "./DeleteButton";
@@ -14,10 +13,6 @@ const SongsListMobile = () => {
 
   const songs = useUnit($songs);
   const searchValue = useUnit($songSearchQuery);
-
-  useEffect(() => {
-    songsFetchFx();
-  }, []);
 
   const displayedSongs = useMemo(() => {
     const songsList = values(songs.byId);

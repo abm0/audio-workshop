@@ -1,9 +1,8 @@
 import { Center, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { useUnit } from "effector-react";
 import { isEmpty, values } from "lodash";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { $songSearchQuery, $songs } from "../models/song";
-import { songsFetchFx } from "../models/song.effects";
 import { getSongUrl } from "../shared/utils";
 import { AudioControls } from "./AudioControls";
 import { DeleteButton } from "./DeleteButton";
@@ -28,10 +27,6 @@ const SongsListDesktop = () => {
   
   const songs = useUnit($songs);
   const searchValue = useUnit($songSearchQuery);
-
-  useEffect(() => {
-    songsFetchFx();
-  }, []);
 
   const displayedSongs = useMemo(() => {
     const songsList = values(songs.byId);

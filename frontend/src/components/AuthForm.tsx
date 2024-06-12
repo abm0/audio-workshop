@@ -1,8 +1,9 @@
 import { Field, Form } from "react-final-form";
-import { Button, Input, Stack, Text } from '@chakra-ui/react';
+import { Button, Input, Stack, Text, useToast } from '@chakra-ui/react';
 import { isRequired } from "../shared/validators";
 import { loginFx } from "../models/auth.effects";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 type AuthFormData = {
   email: string;
@@ -11,9 +12,36 @@ type AuthFormData = {
 
 const AuthForm = () => {
   const { t } = useTranslation();
+  const toast = useToast()
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFormSubmit = (values: AuthFormData) => {
-    loginFx(values);
+    setIsSubmitting(true);
+    
+    try {
+      loginFx(values);
+
+      setIsSubmitting(false);
+      
+      toast({
+        title: t('success'),
+        description: "Вы авторизованы",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch(e) {
+      setIsSubmitting(false);
+
+      toast({
+        title: t('something_wrond'),
+        description: "Возможно введён неверный логин и пароль",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -47,6 +75,7 @@ const AuthForm = () => {
             colorScheme="teal"
             size="sm"
             width="auto"
+            isLoading={isSubmitting}
             onClick={handleSubmit}
           >
             {t('log_in')}

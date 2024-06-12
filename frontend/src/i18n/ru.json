@@ -23,5 +23,11 @@
   "placeholder__track_search": "Поиск по названию трека",
   "message__analysis_in_progess": "Идёт анализ трека",
   "message__empty_tracks": "Вы пока не добавили ни одного трека",
-  "message__tracks_not_found": "Треков с таким названием не найдено"
+  "message__tracks_not_found": "Треков с таким названием не найдено",
+  "something_wrond": "Что то пошло не так",
+  "success": "Успех!",
+  "message__file_uploaded": "Файл загружен",
+  "message__file_upload_failed": "При загрузке файла произошла ошибка",
+  "message__user_created": "Пользователь создан",
+  "message__user_create_failed": "При создании пользователя произошла ошибка"
 }

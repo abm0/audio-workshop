@@ -1,7 +1,7 @@
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Button, ButtonProps } from "@chakra-ui/react";
 import { useState } from "react";
-import { trackDeleteFx } from "../models/song.effects";
+import { deleteSongFx } from "../models/song.effects";
 import { Song } from "../models/song.types";
 
 
@@ -17,7 +17,7 @@ const DeleteButton = (props: IDeleteButton) => {
   
   const handleClick = async () => {
     setIsLoading(true);
-    await trackDeleteFx({ id: songId });
+    await deleteSongFx({ id: songId });
     setIsLoading(false);
   };
 

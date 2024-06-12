@@ -1,8 +1,9 @@
 import { Field, Form } from "react-final-form";
-import { Button, Input, Stack, Text } from '@chakra-ui/react';
+import { Button, Input, Stack, Text, useToast } from '@chakra-ui/react';
 import { isRequired } from "../shared/validators";
 import { signupFx } from "../models/auth.effects";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 type RegisterFormData = {
   name: string;
@@ -12,9 +13,36 @@ type RegisterFormData = {
 
 const RegisterForm = () => {
   const { t } = useTranslation();
+  const toast = useToast()
 
-  const handleFormSubmit = (values: RegisterFormData) => {
-    signupFx(values);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleFormSubmit = async (values: RegisterFormData) => {
+    setIsSubmitting(true);
+
+    try {
+      await signupFx(values);
+
+      setIsSubmitting(false);
+
+      toast({
+        title: t('success'),
+        description: "Пользователь создан",
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch(e) {
+      setIsSubmitting(false);
+        
+      toast({
+        title: t('something_wrong'),
+        description: "При создании пользователя произошла ошибка",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -59,6 +87,7 @@ const RegisterForm = () => {
             colorScheme="teal"
             size="sm"
             width="auto"
+            isLoading={isSubmitting}
             onClick={handleSubmit}
           >
             {t('sign_in')}

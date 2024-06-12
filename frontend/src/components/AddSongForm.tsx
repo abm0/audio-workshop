@@ -4,12 +4,12 @@ import { isRequired } from '../shared/validators';
 import { FileUploader } from './FileUploader';
 import { useUnit } from 'effector-react';
 import { $profile } from '../models/user';
-import { songUploadFx } from '../models/song.effects';
+import { uploadSongFx } from '../models/song.effects';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@chakra-ui/react';
 
-interface IAddTrackForm {
+interface IAddSongForm {
   onSubmit: () => void;
 }
 
@@ -18,31 +18,36 @@ export type SongFormData = {
   sourceFile: string | Blob;
 };
 
-const AddSongForm = (props: IAddTrackForm) => {
+const AddSongForm = (props: IAddSongForm) => {
   const { t } = useTranslation();
   
   const toast = useToast()
 
-  const profile = useUnit($profile);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleFormSubmit = async (values: SongFormData) => {
-    if (profile == null) return;
-    
+  const handleFormSubmit = async (values: SongFormData) => {    
     setIsSubmitting(true);
     
     try {
-      await songUploadFx(values);
+      await uploadSongFx(values);
 
       setIsSubmitting(false);
+      
+      toast({
+        title: t('success'),
+        description: t('message__file_uploaded'),
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
       
       props.onSubmit();
     } catch (e) {
       setIsSubmitting(false);
 
       toast({
-        title: 'Что то пошло не так',
-        description: "При загрузке трека произошла ошибка",
+        title: t('something_wrong'),
+        description: t('message__file_upload_failed'),
         status: 'error',
         duration: 9000,
         isClosable: true,

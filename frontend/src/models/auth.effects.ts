@@ -2,7 +2,7 @@ import { createEffect } from "effector";
 import { LoginRequestPayload, RegisterRequestPayload } from "./auth.types";
 import * as authApi from '../api/auth';
 import { ACCESS_TOKEN_LS_KEY, REFRESH_TOKEN_LS_KEY } from "../shared/constants";
-import { login, logout, refreshFailed } from "./auth.events";
+import { login, logout } from "./auth.events";
 
 export const loginFx = createEffect(async (payload: LoginRequestPayload) => {
   try {
@@ -42,8 +42,6 @@ export const logoutFx = createEffect(async () => {
       
     localStorage.removeItem(ACCESS_TOKEN_LS_KEY);
     localStorage.removeItem(REFRESH_TOKEN_LS_KEY);
-
-    logout();
   } catch(e) {    
     throw e;
   }

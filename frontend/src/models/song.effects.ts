@@ -1,38 +1,43 @@
 import { createEffect } from "effector";
 import * as trackApi from '../api/song';
 import { Song, SongDeleteRequestPayload, SongUploadFxPayload, } from "./song.types";
+import { handleUnauthorizedError } from "../shared/utils";
 
 
-export const songUploadFx = createEffect(async (payload: SongUploadFxPayload) => {
+export const uploadSongFx = createEffect(async (payload: SongUploadFxPayload) => {
   const formData = new FormData();
   
   formData.append('title', payload.title);
   formData.append('source_file', payload.sourceFile);
     
   try {
-    const data = await trackApi.uploadSong(formData);
+    const response = await trackApi.uploadSong(formData);
 
-    return data.payload;
+    return response.data.payload;
+  } catch(e) {
+    handleUnauthorizedError(e);
+  }
+});
+
+
+export const loadSongsFx = createEffect(async (): Promise<Song[]> => {
+  try {
+    const response = await trackApi.fetchSongs();
+
+    return response.data.payload;
   } catch(e) {
     throw e;
   }
 });
 
+loadSongsFx();
 
-export const songsFetchFx = createEffect(async (): Promise<Song[]> => {
+export const deleteSongFx = createEffect(async (payload: SongDeleteRequestPayload) => {
   try {
-    return await trackApi.fetchSongs();
-  } catch(e) {
-    throw e;
-  }
-});
+    const response = await trackApi.deleteSong(payload);
 
-export const trackDeleteFx = createEffect(async (payload: SongDeleteRequestPayload) => {
-  try {
-    await trackApi.deleteSong(payload);
-
-    return payload;
+    return response.data.payload;
   } catch (e) {
-    throw e;
+    handleUnauthorizedError(e);
   }
 });

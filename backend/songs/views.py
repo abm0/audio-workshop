@@ -23,10 +23,10 @@ class SongView(RetrieveAPIView):
         
         status_code = status.HTTP_200_OK
         response = {
-                "success": True,
-                "status_code": status_code,
-                "message": "Список треков успешно загружен",
-                "payload": serializer.data
+                'success': True,
+                'status_code': status_code,
+                'message': 'Список треков успешно загружен',
+                'payload': serializer.data
             }
         
         return Response(response, status=status_code)
@@ -46,10 +46,10 @@ class SongView(RetrieveAPIView):
             serializer.save()
             
             response = {
-                "success": True,
-                "status_code": status.HTTP_200_OK,
-                "message": "Трек успешно загружен",
-                "payload": serializer.data
+                'success': True,
+                'status_code': status.HTTP_200_OK,
+                'message': 'Трек успешно загружен',
+                'payload': serializer.data
             }
 
             status_code = status.HTTP_200_OK
@@ -57,6 +57,35 @@ class SongView(RetrieveAPIView):
             return Response(response, status=status_code)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        song_id = request.query_params.get('id')
+        
+        if not song_id:
+            status_code = status.HTTP_400_BAD_REQUEST
+            response = {
+                'success': False,
+                'status_code': status_code,
+                'message': 'Необходимо передать параметр id',
+            }        
+            
+            return Response(response, status_code)
+        
+        song = Song.objects.get(pk=song_id)
+        song.delete()
+
+        status_code = status.HTTP_200_OK
+
+        response = {
+            'success': True,
+            'status_code': status_code,
+            'message': 'Трек успешно удалён',
+            'payload': {
+                'id': song_id
+            }
+        }   
+        
+        return Response(response, status_code)
 
 def serve_media(request, file_path):
     file_full_path = os.path.join(settings.MEDIA_PATH, file_path).replace('/', '\\')
