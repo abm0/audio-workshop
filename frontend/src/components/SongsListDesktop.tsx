@@ -3,7 +3,6 @@ import { useUnit } from "effector-react";
 import { isEmpty, values } from "lodash";
 import React, { useMemo } from "react";
 import { $songSearchQuery, $songs } from "../models/song";
-import { getSongUrl } from "../shared/utils";
 import { AudioControls } from "./AudioControls";
 import { DeleteButton } from "./DeleteButton";
 import { useTranslation } from "react-i18next";
@@ -65,13 +64,13 @@ const SongsListDesktop = () => {
         <Td>{song.tempo}</Td>
         <Td>{song.key}</Td>
         <Td columnGap={4}>
-          <AudioControls src={getSongUrl(song.source_track)} />
+          <AudioControls tracks={song.source_tracks} />
         </Td>
         <Td>
-          <AudioControls src={getSongUrl(song.backing_track)} />
+          <AudioControls tracks={song.backing_tracks} />
         </Td>
         <Td>
-          <AudioControls src={getSongUrl(song.vocals_track)} />
+          <AudioControls tracks={song.vocals_tracks} />
         </Td>
         <Td>
           <DeleteButton songId={song.id} />

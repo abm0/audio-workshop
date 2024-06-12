@@ -15,7 +15,9 @@ export const uploadSongFx = createEffect(async (payload: SongUploadFxPayload) =>
 
     return response.data.payload;
   } catch(e) {
-    handleUnauthorizedError(e);
+    if (handleUnauthorizedError(e)) return;
+
+    throw e;
   }
 });
 
@@ -38,6 +40,8 @@ export const deleteSongFx = createEffect(async (payload: SongDeleteRequestPayloa
 
     return response.data.payload;
   } catch (e) {
-    handleUnauthorizedError(e);
+    if (handleUnauthorizedError(e)) return;
+
+    throw e;
   }
 });

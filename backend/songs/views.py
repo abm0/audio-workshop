@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import serializers
 
 from .serializers import SongSerializer
 from .models import Song
@@ -43,18 +44,21 @@ class SongView(RetrieveAPIView):
         serializer = self.serializer_class(data=data)
         
         if serializer.is_valid():
-            serializer.save()
-            
-            response = {
-                'success': True,
-                'status_code': status.HTTP_200_OK,
-                'message': 'Трек успешно загружен',
-                'payload': serializer.data
-            }
+            try:
+                serializer.save()
+                
+                response = {
+                    'success': True,
+                    'status_code': status.HTTP_200_OK,
+                    'message': 'Трек успешно загружен',
+                    'payload': serializer.data
+                }
 
-            status_code = status.HTTP_200_OK
+                status_code = status.HTTP_200_OK
 
-            return Response(response, status=status_code)
+                return Response(response, status=status_code)
+            except serializers.ValidationError:
+                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

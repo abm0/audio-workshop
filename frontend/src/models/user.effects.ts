@@ -6,7 +6,9 @@ export const loadProfileFx = createEffect(async () => {
   try {
     return await userApi.loadProfile();
   } catch (e) {
-    handleUnauthorizedError(e);
+    if (handleUnauthorizedError(e)) return;
+
+    throw e;
   }
 });
 

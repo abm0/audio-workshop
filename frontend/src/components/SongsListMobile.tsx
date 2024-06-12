@@ -4,7 +4,6 @@ import { isEmpty, values } from "lodash";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { $songSearchQuery, $songs } from "../models/song";
-import { getSongUrl } from "../shared/utils";
 import { AudioControls } from "./AudioControls";
 import { DeleteButton } from "./DeleteButton";
 
@@ -71,15 +70,15 @@ const SongsListMobile = () => {
                 </HStack>
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('source_track')}:</Text>
-                  <AudioControls src={getSongUrl(song.source_track)} />
+                  <AudioControls tracks={song.source_tracks} />
                 </HStack>
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('backing_track')}:</Text>
-                  <AudioControls src={getSongUrl(song.backing_track)} />
+                  <AudioControls tracks={song.backing_tracks} />
                 </HStack>
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('vocals_track')}:</Text>
-                  <AudioControls src={getSongUrl(song.vocals_track)} />
+                  <AudioControls tracks={song.vocals_tracks} />
                 </HStack>
               </Stack>
             </CardBody>

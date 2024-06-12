@@ -1,11 +1,18 @@
+export type Track = {
+  song: string;
+  file: string;
+  extension: string;
+  type: string;
+}
+
 export type Song = {
   id: string;
   title: string;
   tempo: number;
   key: string;
-  source_track: string;
-  vocals_track: string;
-  backing_track: string;
+  source_tracks: Track[];
+  vocals_tracks: Track[];
+  backing_tracks: Track[];
 };
 
 export type SongsStore = {

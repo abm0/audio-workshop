@@ -24,7 +24,7 @@
   "message__analysis_in_progess": "Analysing track",
   "message__empty_tracks": "Your track list is empty",
   "message__tracks_not_found": "Tracks not found",
-  "something_wrond": "Something is wrong",
+  "something_wrong": "Something is wrong",
   "success": "Success!",
   "message__file_uploaded": "File uploaded",
   "message__file_upload_failed": "File upload failed",

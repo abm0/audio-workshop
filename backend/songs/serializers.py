@@ -5,6 +5,10 @@ from .models import Song, Track
 from .scripts.analyse import analyze_track
 from .scripts.separate import separate_song
 
+track_type_rename_map = {
+    'accompaniment': 'backing_track',
+}
+
 class TrackSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -55,9 +59,12 @@ class SongSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         source_file = validated_data.pop('source_file')
+        source_extension = os.path.splitext(source_file.name)[1].replace('.', '')
+
         temp_source_file_path = self.save_file_temporarily(source_file)
         
         key, tempo = analyze_track(temp_source_file_path)
+
         
         song_data = {
             'title': validated_data['title'],
@@ -68,69 +75,40 @@ class SongSerializer(serializers.ModelSerializer):
         
         song = Song.objects.create_song(data=song_data)
         
-        
-        source_data = {
-            'song': song.id,
-            'file': source_file,
-            'extension': 'mp3',
-            'type': 'source',
-        }
-        
+        tracks_tuples = [(source_file, 'source', source_extension)]
 
-        source_serializer = TrackSerializer(data=source_data)
-        
-        if source_serializer.is_valid():
-            source_serializer.save(song=song)
-        else:
-            print(source_serializer.errors)
-            raise serializers.ValidationError({ 'detail': source_serializer.errors })
-        
-
-        [backing_track_file, vocals_file] = separate_song(temp_source_file_path)
+        separated_tracks_tuples = separate_song(temp_source_file_path)
         os.remove(temp_source_file_path)
         
-        backing_track_data = {
-            'song': song.id,
-            'file': backing_track_file,
-            'extension': 'mp3',
-            'type': 'backing_track',
-        }
+        tracks_tuples.extend(separated_tracks_tuples)
         
-        backing_track_serializer = TrackSerializer(data=backing_track_data)
-        
-        if backing_track_serializer.is_valid():
-            backing_track_serializer.save(song=song)
-        else:
-            print(backing_track_serializer.errors)
-            raise serializers.ValidationError({ 'detail': backing_track_serializer.errors })
-        
+        for file, type, extension in tracks_tuples:
+            data = {
+                'song': song.id,
+                'file': file,
+                'type': track_type_rename_map.get(type, type),
+                'extension': extension
+            }
+            
+            serializer = TrackSerializer(data=data)
+            
+            if serializer.is_valid():
+                serializer.save(song=song)
+            else:
+                print(serializer.errors)
+                raise serializers.ValidationError({ 'detail': serializer.errors })
                 
-        vocals_track_data = {
-            'song': song.id,
-            'file': vocals_file,
-            'extension': 'mp3',
-            'type': 'vocals',
-        }
-        
-        vocals_serializer = TrackSerializer(data=vocals_track_data)
-        
-        if vocals_serializer.is_valid():
-            vocals_serializer.save(song=song)
-        else:
-            print(vocals_serializer.errors)
-            raise serializers.ValidationError({ 'detail': vocals_serializer.errors })
-        
         return song
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        source_track = instance.tracks.filter(type='source').first()
-        vocals_track = instance.tracks.filter(type='vocals').first()
-        backing_track = instance.tracks.filter(type='backing_track').first()
+        source_tracks = instance.tracks.filter(type='source')
+        vocals_tracks = instance.tracks.filter(type='vocals')
+        backing_tracks = instance.tracks.filter(type='backing_track')
 
         # Представляем треки в соответствующих полях
-        representation['source_track'] = TrackSerializer(source_track).data['file'] if source_track else None
-        representation['vocals_track'] = TrackSerializer(vocals_track).data['file'] if vocals_track else None
-        representation['backing_track'] = TrackSerializer(backing_track).data['file'] if backing_track else None
+        representation['source_tracks'] = TrackSerializer(source_tracks, many=True).data if source_tracks else None
+        representation['vocals_tracks'] = TrackSerializer(vocals_tracks, many=True).data if vocals_tracks else None
+        representation['backing_tracks'] = TrackSerializer(backing_tracks, many=True).data if backing_tracks else None
 
         return representation
