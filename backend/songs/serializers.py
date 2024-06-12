@@ -1,6 +1,10 @@
 import os
 import tempfile
 from rest_framework import serializers
+from pydub import AudioSegment
+from io import BytesIO
+from django.core.files import File
+
 from .models import Song, Track
 from .scripts.analyse import analyze_track
 from .scripts.separate import separate_song
@@ -56,6 +60,34 @@ class SongSerializer(serializers.ModelSerializer):
                 temp_file.write(chunk)
 
         return temp_file_path
+    
+    def convert_mp3_to_wav(self, file_path):
+        formatted_file_path = file_path.replace('.mp3', '.wav')
+        file_name = os.path.split(formatted_file_path)[1]
+        
+        audio = AudioSegment.from_mp3(file_path)
+
+        audio.export(formatted_file_path, format="wav")
+        
+        with open(formatted_file_path, 'rb') as f:
+            file_content = BytesIO(f.read())
+            django_file = File(file_content, name=file_name)
+
+            return django_file
+        
+    def convert_wav_to_mp3(self, file_path):
+        formatted_file_path = file_path.replace('.wav', '.mp3')
+        file_name = os.path.split(formatted_file_path)[1]
+
+        audio = AudioSegment.from_wav(file_path)
+
+        audio.export(formatted_file_path, format="mp3")
+        
+        with open(formatted_file_path, 'rb') as f:
+            file_content = BytesIO(f.read())
+            django_file = File(file_content, name=file_name)
+
+            return django_file
 
     def create(self, validated_data):
         source_file = validated_data.pop('source_file')
@@ -63,8 +95,24 @@ class SongSerializer(serializers.ModelSerializer):
 
         temp_source_file_path = self.save_file_temporarily(source_file)
         
+        
+        source_file_mp3 = None
+        source_file_wav = None
+                
+        if source_extension == 'mp3':
+            source_file_mp3 = source_file
+            source_file_wav = self.convert_mp3_to_wav(temp_source_file_path)
+            
+        elif source_extension == 'wav':
+            source_file_wav = source_file
+            source_file_mp3 = self.convert_wav_to_mp3(temp_source_file_path)
+        
+        tracks_tuples = [
+            (source_file_mp3, 'source', 'mp3'),
+            (source_file_wav, 'source', 'wav')
+        ]
+        
         key, tempo = analyze_track(temp_source_file_path)
-
         
         song_data = {
             'title': validated_data['title'],
@@ -74,8 +122,6 @@ class SongSerializer(serializers.ModelSerializer):
         }
         
         song = Song.objects.create_song(data=song_data)
-        
-        tracks_tuples = [(source_file, 'source', source_extension)]
 
         separated_tracks_tuples = separate_song(temp_source_file_path)
         os.remove(temp_source_file_path)
