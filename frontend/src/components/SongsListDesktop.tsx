@@ -62,7 +62,7 @@ const SongsListDesktop = () => {
       <Tr key={song.id}>
         <Td>{song.title}</Td>
         <Td>{song.tempo}</Td>
-        <Td>{song.key}</Td>
+        <Td>{t(song.key)}</Td>
         <Td columnGap={4}>
           <AudioControls tracks={song.source_tracks} />
         </Td>

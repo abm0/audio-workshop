@@ -65,7 +65,7 @@ const SongsListMobile = () => {
                 <HStack justifyContent="space-between">
                   <Text size="xs">{t('key')}:</Text>
                   <Text fontSize='sm' fontWeight="bold">
-                    {song.key}
+                    {t(song.key)}
                   </Text>
                 </HStack>
                 <HStack justifyContent="space-between">
