@@ -22,7 +22,7 @@ class SongManager(models.Manager):
 
 class Song(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     tempo = models.IntegerField(unique=False, null=True)
     key = models.CharField(max_length=10, unique=False, null=True)
@@ -34,6 +34,10 @@ class Song(models.Model):
 
     class Meta:
         db_table = 'songs'
+        
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'title'], name='unique_song_for_user')
+        ]
 
 class TrackManager(models.Manager):
   def create_track(self, data):

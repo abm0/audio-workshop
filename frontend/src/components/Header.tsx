@@ -60,7 +60,7 @@ const Header = () => {
   const appLogo = (
     <HStack>
       <Image src={logo} borderRadius="50%" boxSize="50px" />
-      <Heading size="md" userSelect="none">Audio Workshop</Heading>
+      <Heading size="md" userSelect="none">Музыкальная коллекция</Heading>
     </HStack>
   );
   
