@@ -16,11 +16,11 @@ const AuthForm = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFormSubmit = (values: AuthFormData) => {
+  const handleFormSubmit = async (values: AuthFormData) => {
     setIsSubmitting(true);
     
     try {
-      loginFx(values);
+      await loginFx(values);
 
       setIsSubmitting(false);
       
