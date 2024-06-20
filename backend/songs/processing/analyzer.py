@@ -1,8 +1,12 @@
 import librosa
 
-def analyze_track(file_path):
+class TrackAnalyzer:
+  def __init__(self, source_file):
+    self.__source_file = source_file
+    
+  def analyze_track(self):
     # Загрузка аудио файла
-    y, sr = librosa.load(file_path)
+    y, sr = librosa.load(self.__source_file)
     
     # Определение тональности
     chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
