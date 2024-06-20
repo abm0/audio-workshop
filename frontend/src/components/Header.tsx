@@ -10,6 +10,8 @@ import {
   DrawerOverlay,
   HStack,
   Heading, Image,
+  Link,
+  Spacer,
   Text, useDisclosure
 } from "@chakra-ui/react";
 import { $isAuthenticated,  } from "../models/auth";
@@ -22,6 +24,8 @@ import { useTranslation } from "react-i18next";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useIsMobile } from "../shared/hooks";
 import { Profile } from "./Profile";
+import { MAIN_PATH } from "../shared/constants";
+import { Navbar } from "./Navbar";
 
 interface IDrawerMenu {
   children: React.ReactNode;
@@ -77,7 +81,9 @@ const Header = () => {
           )}
           </DrawerHeader>
 
-          <DrawerBody />
+          <DrawerBody>
+            <Navbar hidden={!isAuthenticated} />
+          </DrawerBody>
 
           <DrawerFooter justifyContent="space-between">
               <LanguageSelect />
@@ -89,8 +95,11 @@ const Header = () => {
   }
   
   return (
-    <HStack justify="space-between">
-        {appLogo}
+    <HStack justify="space-between" alignItems="center">
+        <HStack spacing={4}>
+          {appLogo}
+          <Navbar hidden={!isAuthenticated} />
+        </HStack>
 
         <HStack>
           <LanguageSelect />

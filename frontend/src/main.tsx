@@ -11,25 +11,28 @@ import './index.css';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthLayout } from './layouts/AuthLayout';
 import './i18n/config';
+import { ABOUT_PATH, AUTH_PATH, MAIN_PATH, REGISTER_PATH } from './shared/constants';
+import AboutPage from './pages/AboutPage';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/auth" element={<AuthLayout headerContent={<Header />} />}>
+          <Route path={AUTH_PATH} element={<AuthLayout headerContent={<Header />} />}>
             <Route index element={<AuthPage />} />
-            <Route path="register" element={null} />
+            <Route path={REGISTER_PATH} element={null} />
           </Route>
           <Route 
-            path="/" 
+            path={MAIN_PATH}
             element={
               <ProtectedRoute>
                 <MainLayout headerContent={<Header />} />
               </ProtectedRoute>
             }
           >
-            <Route path="/main" element={<MainPage />} />
+            <Route index element={<MainPage />} />
+            <Route path={ABOUT_PATH} element={<AboutPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

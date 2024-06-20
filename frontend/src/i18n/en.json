@@ -31,5 +31,17 @@
   "message__user_created": "User crated",
   "message__user_create_failed": "User create failed",
   "message__log_in": "You have logged in",
-  "message__log_in_failed": "Wrong email/password"
+  "message__log_in_failed": "Wrong email/password",
+  "cabinet": "Cabinet",
+  "about": "About",
+  "text__welcome": "Welcome to the \"Music Collection\" app!",
+  "text__enthusiasts": "We are a team of enthusiasts in music, technology, and unparalleled user experience, dedicated to making the world better and more musical.",
+  "text__targeting": "Love karaoke? Or maybe you're a music teacher? Either way, you're in luck with us!",
+  "our_mission": "Our Mission",
+  "text__mission": "Our goal is to provide users with the ability to easily and quickly analyze musical compositions any time of day or night, any time of year!",
+  "offer": "What We Offer",
+  "text__analysis": "Tempo and Key Analysis: Our algorithms will help you determine the tempo and key of your composition in just a few seconds.",
+  "text__separation": "Track Separation: Get a clean vocal or instrumental version of a track for further use in remixes, karaoke, or other musical projects.",
+  "text__interface": "Intuitive Interface: We've done our best to make your interaction with the app as simple and convenient as possible.",
+  "contacts": "Our Contacts"
 }
