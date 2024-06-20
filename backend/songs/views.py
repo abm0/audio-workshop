@@ -7,8 +7,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
 
-from .serializers import SongSerializer
+from .serializers import SongSerializer, TrackSerializer
 from .models import Song
+from .processing.converter import Converter
+from .processing.analyzer import TrackAnalyzer
+from .processing.separator import TrackSeparator
 
 class SongView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
@@ -34,24 +37,59 @@ class SongView(RetrieveAPIView):
     
     def post(self, request):        
         user = request.user
-                
+        
+        source_file = request.data['source_file']
+        
+        analyzer = TrackAnalyzer(source_file=source_file)
+        converter = Converter(source_file=source_file)
+        separator = TrackSeparator(source_file=source_file)
+
+        key, tempo = analyzer.analyze_track()
+                        
         data = {
             'title': request.data['title'],
-            'source_file': request.data['source_file'],
             'user': user.id,
+            'tempo': int(tempo),
+            'key': key,
         }
 
-        serializer = self.serializer_class(data=data)
+        song_serializer = self.serializer_class(data=data)
         
-        if serializer.is_valid():
+        if song_serializer.is_valid():
             try:
-                serializer.save()
+                song = song_serializer.save()
+                                
+                source_file_mp3, source_file_wav = converter.get_converted()
+        
+                tracks_tuples = [
+                    (source_file_mp3, 'source', 'mp3'),
+                    (source_file_wav, 'source', 'wav')
+                ]
+                
+                separated_tracks_tuples = separator.separate_song()
+                tracks_tuples.extend(separated_tracks_tuples)
+                
+                for file, type, extension in tracks_tuples:
+                    data = {
+                        'song': song.id,
+                        'file': file,
+                        'type': type,
+                        'extension': extension
+                    }
+                    
+                    track_serializer = TrackSerializer(data=data)
+                    
+                    if track_serializer.is_valid():
+                        track_serializer.save(song=song)
+                    else:
+                        print(track_serializer.errors)
+                        raise serializers.ValidationError({ 'detail': song_serializer.errors })
                 
                 response = {
                     'success': True,
                     'status_code': status.HTTP_200_OK,
                     'message': 'Трек успешно загружен',
-                    'payload': serializer.data
+                    'payload': song_serializer.data
                 }
 
                 status_code = status.HTTP_200_OK
@@ -60,7 +98,7 @@ class SongView(RetrieveAPIView):
             except serializers.ValidationError:
                 return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(song_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request):
         song_id = request.query_params.get('id')

@@ -19,6 +19,15 @@ class SongManager(models.Manager):
       
     def get_track_by_id(self, track_id):
         return self.get(pk=track_id)
+      
+    def get_source_tracks(self, song_id):
+      return self.get(id=song_id).tracks.filter(type='source')
+      
+    def get_vocals_tracks(self, song_id):
+      return self.get(id=song_id).tracks.filter(type='vocals')
+
+    def get_backing_tracks(self, song_id):
+      return self.get(id=song_id).tracks.filter(type='accompaniment')
 
 class Song(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
