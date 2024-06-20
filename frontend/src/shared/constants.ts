@@ -34,6 +34,7 @@ export const AUTH_PATH = '/auth';
 export const REGISTER_PATH = `${AUTH_PATH}/register`
 export const MAIN_PATH = '/';
 export const ABOUT_PATH = '/about';
+export const PROFILE_PATH = '/profile';
 
 /**
  * Ключи для хранения токенов в local storage

@@ -11,8 +11,9 @@ import './index.css';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthLayout } from './layouts/AuthLayout';
 import './i18n/config';
-import { ABOUT_PATH, AUTH_PATH, MAIN_PATH, REGISTER_PATH } from './shared/constants';
+import { ABOUT_PATH, AUTH_PATH, MAIN_PATH, PROFILE_PATH, REGISTER_PATH } from './shared/constants';
 import AboutPage from './pages/AboutPage';
+import { ProfilePage } from './pages/ProfilePage';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -33,6 +34,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           >
             <Route index element={<MainPage />} />
             <Route path={ABOUT_PATH} element={<AboutPage />} />
+            <Route path={PROFILE_PATH} element={<ProfilePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

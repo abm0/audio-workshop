@@ -43,5 +43,7 @@
   "text__analysis": "Tempo and Key Analysis: Our algorithms will help you determine the tempo and key of your composition in just a few seconds.",
   "text__separation": "Track Separation: Get a clean vocal or instrumental version of a track for further use in remixes, karaoke, or other musical projects.",
   "text__interface": "Intuitive Interface: We've done our best to make your interaction with the app as simple and convenient as possible.",
-  "contacts": "Our Contacts"
+  "contacts": "Our Contacts",
+  "profile": "Profile",
+  "submit": "Submit"
 }
